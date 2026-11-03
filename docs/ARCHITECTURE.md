@@ -7,17 +7,21 @@
 ├── app/                       # Laravel backend
 ├── routes/
 ├── tests/
-├── frontend/                  # Nuxt frontend
+├── frontend/                  # Nuxt 4 frontend (srcDir: app/)
 │   ├── app/
-│   ├── components/
-│   ├── composables/
-│   ├── layouts/
-│   ├── pages/
+│   │   ├── assets/css/        # IUGM design tokens (Tailwind v4)
+│   │   ├── components/        # iugm/, layout/, ui/ (shadcn-vue), home/…
+│   │   ├── composables/
+│   │   ├── data/              # typed local prototype data
+│   │   ├── layouts/
+│   │   ├── pages/
+│   │   ├── services/          # data access (local now, /api/v1 later)
+│   │   ├── types/
+│   │   └── utils/
 │   ├── public/
-│   ├── server/
-│   ├── types/
 │   ├── nuxt.config.ts
 │   └── package.json
+├── design/                    # Claude Design reference (local, read-only, not committed)
 ├── docs/
 ├── .claude/skills/
 ├── .agents/skills/
@@ -26,6 +30,10 @@
 ```
 
 Laravel remains at the repository root because it is already installed.
+
+Local development: Laravel on `http://localhost:8000`, Nuxt on `http://localhost:3000`.
+The frontend requires Node `^22.22.3` (`frontend/.nvmrc`) and reads the API base URL from
+`NUXT_PUBLIC_API_BASE` (see `frontend/.env.example`).
 
 ## Responsibility split
 
