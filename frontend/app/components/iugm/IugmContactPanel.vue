@@ -8,79 +8,70 @@ withDefaults(defineProps<{
 }>(), {
   distance: false,
 })
-
-const hasPending = hasUnverified([
-  ...contacts.mainPhones,
-  contacts.email,
-  ...contacts.regional.flatMap(campus => campus.phones),
-  ...contacts.distance,
-])
 </script>
 
 <template>
-  <div class="flex flex-col gap-5 rounded border border-border bg-surface p-5 md:p-6">
-    <h2 class="m-0 text-xl font-bold text-primary-strong">
-      Contacter l’IUGM
-    </h2>
-    <IugmPendingTag
-      v-if="hasPending"
-      label="COORDONNÉES DES BROCHURES · À CONFIRMER PAR L’IUGM"
-    />
+  <Card>
+    <CardHeader>
+      <CardTitle>
+        <h2 class="m-0 text-xl font-semibold tracking-tight">
+          Contacter l’IUGM
+        </h2>
+      </CardTitle>
+    </CardHeader>
+    <CardContent class="flex flex-col gap-5">
+      <div
+        v-if="distance"
+        class="flex flex-col gap-1"
+      >
+        <h3 class="m-0 text-sm font-semibold">
+          Formation à distance
+        </h3>
+        <IugmContactLink
+          v-for="point in contacts.distance"
+          :key="point.target"
+          :point="point"
+          class="break-words"
+        />
+      </div>
 
-    <div
-      v-if="distance"
-      class="flex flex-col gap-1 text-sm"
-    >
-      <h3 class="m-0 text-sm font-bold">
-        Formation à distance
-      </h3>
-      <IugmContactLink
-        v-for="point in contacts.distance"
-        :key="point.target"
-        :point="point"
-        :show-pending="false"
-        class="break-words"
-      />
-    </div>
+      <div class="flex flex-col gap-1">
+        <h3 class="m-0 text-sm font-semibold">
+          {{ institution.mainCampus.name }}
+        </h3>
+        <IugmContactLink
+          v-for="point in contacts.mainPhones"
+          :key="point.target"
+          :point="point"
+        />
+        <IugmContactLink
+          v-if="isPublishable(contacts.email)"
+          :point="contacts.email"
+          class="break-words"
+        />
+        <address class="mt-1 text-foreground-muted not-italic">
+          {{ institution.address[1] }}
+        </address>
+      </div>
 
-    <div class="flex flex-col gap-1 text-sm">
-      <h3 class="m-0 text-sm font-bold">
-        {{ institution.mainCampus.name }}
-      </h3>
-      <IugmContactLink
-        v-for="point in contacts.mainPhones"
-        :key="point.target"
-        :point="point"
-        :show-pending="false"
-      />
-      <IugmContactLink
-        :point="contacts.email"
-        :show-pending="false"
-        class="break-words"
-      />
-      <address class="mt-1 text-foreground-muted not-italic">
-        {{ institution.address[1] }}
-      </address>
-    </div>
+      <div
+        v-for="campus in contacts.regional"
+        :key="campus.name"
+        class="flex flex-col gap-1"
+      >
+        <h3 class="m-0 text-sm font-semibold">
+          {{ campus.name }}
+        </h3>
+        <IugmContactLink
+          v-for="point in campus.phones"
+          :key="point.target"
+          :point="point"
+        />
+      </div>
 
-    <div
-      v-for="campus in contacts.regional"
-      :key="campus.name"
-      class="flex flex-col gap-1 text-sm"
-    >
-      <h3 class="m-0 text-sm font-bold">
-        {{ campus.name }}
-      </h3>
-      <IugmContactLink
-        v-for="point in campus.phones"
-        :key="point.target"
-        :point="point"
-        :show-pending="false"
-      />
-    </div>
-
-    <p class="m-0 text-sm text-foreground-muted">
-      Facebook · {{ institution.facebook.label }}
-    </p>
-  </div>
+      <p class="m-0 text-foreground-muted">
+        Facebook · {{ institution.facebook.label }}
+      </p>
+    </CardContent>
+  </Card>
 </template>

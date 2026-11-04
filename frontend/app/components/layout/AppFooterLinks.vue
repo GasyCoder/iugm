@@ -15,19 +15,19 @@ defineProps<{
       <AppNavLink
         v-if="link.to"
         :to="link.to"
-        class="break-words text-white no-underline hover:text-iugm-green-300"
+        class="break-words text-iugm-blue-100 no-underline hover:text-white"
       >
         {{ link.label }}
       </AppNavLink>
       <a
         v-else-if="link.href"
         :href="link.href"
-        class="break-words text-white no-underline hover:text-iugm-green-300"
+        class="break-words text-iugm-blue-100 no-underline hover:text-white"
       >{{ link.label }}</a>
       <!-- Page non encore publiée : affichée sans lien. -->
       <span
         v-else
-        class="text-iugm-blue-200"
+        class="text-iugm-blue-300"
       >{{ link.label }}</span>
     </li>
   </ul>

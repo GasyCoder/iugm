@@ -99,10 +99,7 @@ export default defineNuxtConfig({
       subsets: ['latin'],
     },
     families: [
-      // Seule la police du Hero est préchargée : les autres arrivent en font-display: swap, avec un fallback aux métriques ajustées.
-      { name: 'Schibsted Grotesk', provider: 'google', weights: [400, 500, 600, 700, 800], styles: ['normal'], preload: true },
-      { name: 'Newsreader', provider: 'google', weights: [400, 500], styles: ['italic'] },
-      { name: 'JetBrains Mono', provider: 'google', weights: [400, 500], styles: ['normal'] },
+      { name: 'Inter', provider: 'google', weights: [400, 500, 600, 700], styles: ['normal'], preload: true },
     ],
   },
 

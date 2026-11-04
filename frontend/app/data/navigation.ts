@@ -17,17 +17,12 @@ export const mainNavigation: NavItem[] = [
   { label: 'Formations', to: '/formations' },
   { label: 'Admissions', to: '/admissions' },
   { label: 'Vie étudiante', to: homeSection('vie-iugm'), sectionId: 'vie-iugm' },
-  { label: 'Actualités', to: homeSection('actualites'), sectionId: 'actualites' },
-  { label: 'Entreprises & Partenaires', to: homeSection('entreprises'), sectionId: 'entreprises' },
+  { label: 'Entreprises', to: homeSection('entreprises'), sectionId: 'entreprises' },
   { label: 'Contact', to: contactLink, sectionId: 'contact' },
 ]
 
-/** Le menu mobile ajoute « Alumni » (prototype v2), dirigé vers les témoignages de diplômés. */
-export const mobileNavigation: NavItem[] = [
-  ...mainNavigation.slice(0, 6),
-  { label: 'Alumni', to: homeSection('temoignages'), sectionId: 'temoignages' },
-  ...mainNavigation.slice(6),
-]
+/** « Actualités » et « Alumni » reviendront avec leurs sections, une fois de vrais contenus publiés. */
+export const mobileNavigation: NavItem[] = mainNavigation
 
 /** Aucune candidature en ligne : le lien mène aux informations d'admission, et le dit. */
 export const applyLink: NavItem = { label: 'Comment candidater', to: '/admissions' }
@@ -39,8 +34,6 @@ export const footerNavigation: FooterLinkGroup[] = [
       { label: 'Présentation', to: homeSection('institut') },
       { label: 'Histoire' },
       { label: 'Gouvernance' },
-      { label: 'Actualités', to: homeSection('actualites') },
-      { label: 'Alumni', to: homeSection('temoignages') },
     ],
   },
   {

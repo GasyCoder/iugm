@@ -1,21 +1,30 @@
 <script setup lang="ts">
 import type { RouteLocationRaw } from 'vue-router'
+import type { ButtonVariants } from '~/components/ui/button'
+import { ArrowRight } from '@lucide/vue'
+import { buttonVariants } from '~/components/ui/button'
 
-/** CTA principal du prototype : pilule blanche, pastille verte avec flèche. */
-defineProps<{
+/** Lien d'action avec flèche. */
+withDefaults(defineProps<{
   to: RouteLocationRaw
-}>()
+  variant?: ButtonVariants['variant']
+  size?: ButtonVariants['size']
+}>(), {
+  variant: 'default',
+  size: 'lg',
+})
 </script>
 
 <template>
   <NuxtLink
     :to="to"
-    class="group flex h-13 items-center justify-between gap-4 rounded-full bg-white pr-2 pl-6 text-base font-semibold text-primary no-underline transition duration-150 ease-out-soft hover:bg-iugm-blue-50 hover:text-primary sm:justify-start"
+    class="group"
+    :class="buttonVariants({ variant, size })"
   >
     <slot />
-    <span
+    <ArrowRight
+      class="transition-transform duration-150 group-hover:translate-x-0.5"
       aria-hidden="true"
-      class="flex size-9 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition duration-150 ease-out-soft group-hover:translate-x-0.5"
-    >→</span>
+    />
   </NuxtLink>
 </template>

@@ -1,6 +1,7 @@
 import type {
   AdmissionStep,
   BusinessOffer,
+  DirectorMessage,
   KeyFigure,
   NewsCategory,
   NewsItem,
@@ -10,7 +11,10 @@ import type {
   Testimonial,
   TestimonialCategory,
 } from '~/types/content'
+import type { ProgramLevel } from '~/types/program'
+import { institution } from '~/data/institution'
 import { media } from '~/data/media'
+import { programs } from '~/data/programs'
 
 /**
  * Contenus de la page d'accueil repris du prototype Claude Design (Accueil v2).
@@ -18,7 +22,8 @@ import { media } from '~/data/media'
  */
 
 export const hero = {
-  title: 'Former aujourd’hui les acteurs du développement de demain.',
+  title: 'Former aujourd’hui les acteurs du',
+  titleHighlight: 'développement de demain.',
   tagline: 'Des compétences ancrées dans nos territoires, ouvertes sur le monde.',
 }
 
@@ -32,15 +37,35 @@ export const pillars: Pillar[] = [
   { number: '03', title: 'Se professionnaliser', description: 'Stages, intervenants du monde professionnel et projets avec les entreprises préparent à l’insertion.' },
 ]
 
-/** Aucun chiffre inventé : « XX » jusqu'à communication par l'IUGM. */
+function programCount(level?: ProgramLevel): string {
+  return String(programs.filter(program => !level || program.level === level).length)
+}
+
+/** Uniquement ce que les brochures permettent de compter. Effectifs, diplômés et partenaires : à ajouter une fois communiqués. */
 export const keyFigures: KeyFigure[] = [
-  { value: 'XX+', label: 'étudiants', status: 'pending' },
-  { value: '3', label: 'sites en région', status: 'brochure' },
-  { value: 'XX', label: 'formations', status: 'pending' },
-  { value: 'XX', label: 'promotions', status: 'pending' },
-  { value: 'XX', label: 'diplômés', status: 'pending' },
-  { value: 'XX', label: 'partenaires', status: 'pending' },
+  { value: programCount(), label: 'formations', status: 'brochure' },
+  { value: programCount('licence'), label: 'en Licence', status: 'brochure' },
+  { value: programCount('master'), label: 'en Master', status: 'brochure' },
+  { value: String(1 + institution.regionalCampuses.length), label: 'sites', status: 'brochure' },
 ]
+
+/**
+ * Portrait transmis le 4 novembre 2026, recadré pour écarter les personnes à l'arrière-plan.
+ * Ni texte ni nom fournis : rien n'est rédigé à la place du Directeur.
+ * Renseigner ces champs et passer `status` à 'verified' pour publier le message.
+ */
+export const directorMessage: DirectorMessage = {
+  quote: null,
+  author: null,
+  role: null,
+  photo: {
+    base: '/images/direction/directeur',
+    alt: 'Portrait du Directeur de l’IUGM',
+    width: 640,
+    height: 726,
+  },
+  status: 'pending',
+}
 
 /** Procédure indicative (brochures) : non officielle tant qu'elle n'est pas validée. */
 export const admissions = {
@@ -49,7 +74,7 @@ export const admissions = {
   steps: [
     { title: 'Choisir sa formation', description: 'Vérifier les séries de bac acceptées pour le parcours.', status: 'brochure' },
     { title: 'Déposer son dossier', description: 'L’admission se fait sur sélection de dossiers.', status: 'brochure' },
-    { title: 'Résultats et inscription', description: 'Calendrier à communiquer par l’IUGM.', status: 'pending' },
+    { title: 'Résultats et inscription', description: 'Renseignez-vous auprès de l’IUGM pour connaître le calendrier.', status: 'pending' },
   ] satisfies AdmissionStep[],
 }
 
@@ -77,9 +102,6 @@ export const businessOffers: BusinessOffer[] = [
   { title: 'Mentorat', description: 'Accompagner un étudiant ou un projet.' },
 ]
 
-/** Emplacements de logos : aucun partenaire documenté à ce jour. */
-export const partnerSlotCount = 5
-
 export const testimonialCategoryLabels: Record<TestimonialCategory, string> = {
   graduate: 'Diplômés',
   student: 'Étudiants',
@@ -93,6 +115,9 @@ export const testimonials: Testimonial[] = [
   { id: 'etudiant', category: 'student', quote: '« Citation d’un étudiant en Licence. »', author: 'Prénom Nom', role: 'L3 [parcours]', status: 'pending' },
   { id: 'partenaire', category: 'partner', quote: '« Citation d’un partenaire recruteur. »', author: 'Prénom Nom', role: 'Fonction, entreprise', status: 'pending' },
 ]
+
+/** Seuls les témoignages validés sont publiés : la section reste masquée tant qu'il n'y en a aucun. */
+export const publishedTestimonials = testimonials.filter(item => item.status === 'verified')
 
 export const newsCategoryLabels: Record<NewsCategory, string> = {
   alumni: 'Alumni',
@@ -127,3 +152,6 @@ export const news: NewsItem[] = [
     status: 'pending',
   },
 ]
+
+/** Seules les actualités validées sont publiées : la section reste masquée tant qu'il n'y en a aucune. */
+export const publishedNews = news.filter(item => item.status === 'verified')

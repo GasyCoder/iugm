@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import type { ProgramDomain, ProgramLevel } from '~/types/program'
 import ProgramCard from '~/components/programs/ProgramCard.vue'
-import { programDomainLabels, programLevelLabels } from '~/data/programs'
+import ProgramSearchFields from '~/components/programs/ProgramSearchFields.vue'
 
 usePageSeo({
   title: 'Formations',
@@ -16,115 +15,54 @@ const domains = computed(() => domainsForLevel(programs.value, filters.value.lev
 const visible = computed(() => filterPrograms(programs.value, filters.value))
 const hasCriteria = computed(() => Object.keys(filtersToQuery(filters.value)).length > 0)
 
-const level = computed({
-  get: () => filters.value.level ?? '',
-  set: (value: ProgramLevel | '') => setLevel(value || null),
-})
-const domain = computed({
-  get: () => filters.value.domain ?? '',
-  set: (value: ProgramDomain | '') => setDomain(value || null),
-})
-
 const resultLabel = computed(() => {
   const count = visible.value.length
   return `${count} formation${count > 1 ? 's' : ''}${hasCriteria.value ? ' correspondant à votre recherche' : ''}`
 })
-
-const fieldClass = 'h-12 w-full rounded border border-border bg-white px-3 text-[15px] text-foreground focus:border-primary'
-const labelClass = 'text-xs font-semibold text-foreground-muted'
 </script>
 
 <template>
   <div>
     <IugmPageHero
-      eyebrow="Formations"
       title="Toutes les formations de l’IUGM"
+      :crumbs="[{ label: 'Accueil', to: '/' }, { label: 'Formations' }]"
     >
-      <p class="m-0 max-w-2xl text-base text-iugm-blue-100 md:text-lg">
+      <p class="m-0 max-w-2xl leading-relaxed text-foreground-muted">
         Licence, Master et formation à distance. Recherchez par mot-clé, niveau ou domaine, puis ouvrez la fiche d’une formation.
       </p>
-      <IugmPendingTag
-        tone="dark"
-        label="SOURCE : BROCHURES IUGM · À CONFIRMER PAR L’IUGM"
-      />
     </IugmPageHero>
 
     <IugmSection
+      :bordered="false"
       spacing="bottom"
-      content-class="flex flex-col gap-6 pt-8 md:pt-10"
+      content-class="flex flex-col gap-6 pt-8 lg:pt-10"
     >
-      <form
-        role="search"
-        aria-label="Rechercher une formation"
-        class="grid grid-cols-2 gap-3 rounded-lg border border-border bg-surface p-4.5 lg:grid-cols-[minmax(0,1fr)_14rem_14rem] lg:gap-4 lg:p-6"
-        @submit.prevent
-      >
-        <div class="col-span-2 flex flex-col gap-1.5 lg:col-span-1">
-          <label
-            for="catalog-keyword"
-            :class="labelClass"
-          >Mot-clé</label>
-          <input
-            id="catalog-keyword"
-            :value="filters.keyword"
-            type="search"
-            enterkeyhint="search"
-            autocomplete="off"
-            placeholder="Finance, marketing, RH…"
-            :class="fieldClass"
-            class="placeholder:text-foreground-muted"
-            @input="setKeyword(($event.target as HTMLInputElement).value)"
+      <Card>
+        <CardContent>
+          <form
+            role="search"
+            aria-label="Rechercher une formation"
+            class="grid grid-cols-2 gap-4 lg:grid-cols-[minmax(0,1fr)_14rem_14rem]"
+            @submit.prevent
           >
-        </div>
-        <div class="flex min-w-0 flex-col gap-1.5">
-          <label
-            for="catalog-level"
-            :class="labelClass"
-          >Niveau</label>
-          <select
-            id="catalog-level"
-            v-model="level"
-            :class="fieldClass"
-          >
-            <option value="">
-              Tous niveaux
-            </option>
-            <option
-              v-for="value in levels"
-              :key="value"
-              :value="value"
-            >
-              {{ programLevelLabels[value] }}
-            </option>
-          </select>
-        </div>
-        <div class="flex min-w-0 flex-col gap-1.5">
-          <label
-            for="catalog-domain"
-            :class="labelClass"
-          >Domaine</label>
-          <select
-            id="catalog-domain"
-            v-model="domain"
-            :class="fieldClass"
-          >
-            <option value="">
-              Tous domaines
-            </option>
-            <option
-              v-for="value in domains"
-              :key="value"
-              :value="value"
-            >
-              {{ programDomainLabels[value] }}
-            </option>
-          </select>
-        </div>
-      </form>
+            <ProgramSearchFields
+              id-prefix="catalog"
+              :levels="levels"
+              :domains="domains"
+              :keyword="filters.keyword"
+              :level="filters.level"
+              :domain="filters.domain"
+              @update:keyword="setKeyword"
+              @update:level="setLevel"
+              @update:domain="setDomain"
+            />
+          </form>
+        </CardContent>
+      </Card>
 
-      <div class="flex min-h-11 items-center justify-between gap-4 border-b border-border pb-4">
+      <div class="flex min-h-10 items-center justify-between gap-4">
         <h2
-          class="m-0 text-base font-bold text-primary-strong"
+          class="m-0 text-base font-semibold"
           aria-live="polite"
           aria-atomic="true"
         >
@@ -142,7 +80,7 @@ const labelClass = 'text-xs font-semibold text-foreground-muted'
 
       <ul
         v-if="visible.length > 0"
-        class="m-0 grid list-none grid-cols-1 gap-0 p-0 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 2xl:grid-cols-4"
+        class="m-0 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3"
       >
         <li
           v-for="program in visible"
@@ -151,24 +89,24 @@ const labelClass = 'text-xs font-semibold text-foreground-muted'
           <ProgramCard :program="program" />
         </li>
       </ul>
-      <div
-        v-else
-        class="flex flex-col items-start gap-4 rounded border border-dashed border-sand-300 bg-surface p-6 md:p-8"
-      >
-        <p class="m-0 text-lg font-bold text-primary-strong">
-          Aucune formation ne correspond à ces critères.
-        </p>
-        <p class="m-0 text-sm text-foreground-muted">
-          Essayez un autre mot-clé, un autre niveau ou un autre domaine.
-        </p>
-        <Button
-          variant="outline"
-          size="sm"
-          @click="reset"
-        >
-          Voir toutes les formations
-        </Button>
-      </div>
+      <Card v-else>
+        <CardHeader>
+          <CardTitle class="text-lg font-semibold">
+            Aucune formation ne correspond à ces critères.
+          </CardTitle>
+          <CardDescription>
+            Essayez un autre mot-clé, un autre niveau ou un autre domaine.
+          </CardDescription>
+        </CardHeader>
+        <CardFooter>
+          <Button
+            variant="outline"
+            @click="reset"
+          >
+            Voir toutes les formations
+          </Button>
+        </CardFooter>
+      </Card>
     </IugmSection>
   </div>
 </template>

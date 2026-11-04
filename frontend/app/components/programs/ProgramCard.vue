@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Program, ProgramDomain } from '~/types/program'
+import { ArrowRight } from '@lucide/vue'
 import { programDomainLabels, programLevelLabels } from '~/data/programs'
 
 defineProps<{
@@ -17,9 +18,9 @@ const domainDot: Record<ProgramDomain, string> = {
 </script>
 
 <template>
-  <article class="relative flex h-full flex-col gap-3 border-b border-border py-4 text-foreground transition duration-150 ease-out-soft sm:rounded sm:border sm:bg-surface sm:p-6 sm:hover:border-iugm-blue-300 sm:hover:shadow-card-hover">
-    <div class="flex items-center justify-between gap-3">
-      <span class="flex items-center gap-2 text-[13px] font-semibold text-foreground-muted">
+  <Card class="group relative h-full gap-3 transition-shadow duration-150 ease-out-soft hover:shadow-md">
+    <CardHeader class="grid-cols-[1fr_auto] items-center gap-3">
+      <span class="flex items-center gap-2 text-[13px] font-medium text-foreground-muted">
         <span
           aria-hidden="true"
           class="size-2 rounded-full"
@@ -27,36 +28,29 @@ const domainDot: Record<ProgramDomain, string> = {
         />
         {{ programDomainLabels[program.domain] }}
       </span>
-      <span class="rounded-sm bg-surface-muted px-2 py-1 text-[11px] font-bold tracking-wider text-primary uppercase">
+      <Badge variant="accent">
         {{ programLevelLabels[program.level] }}
-      </span>
-    </div>
-    <h3 class="m-0 flex-1 text-lg leading-snug font-bold text-balance">
-      <!-- Lien étendu à toute la carte (after:inset-0). -->
-      <NuxtLink
-        :to="`/formations/${program.slug}`"
-        class="text-foreground no-underline after:absolute after:inset-0 hover:text-primary"
-      >
-        {{ program.title }}
-      </NuxtLink>
-    </h3>
-    <p class="m-0 text-sm text-foreground-muted">
-      {{ program.admission }}
-    </p>
-    <IugmPendingTag
-      v-if="program.status === 'pending'"
-      label="NIVEAU À CONFIRMER PAR L’IUGM"
-      class="sm:hidden"
-    />
-    <div class="flex items-center justify-between gap-3 sm:border-t sm:border-sand-200 sm:pt-3">
-      <IugmPendingTag
-        :label="program.status === 'pending' ? 'NIVEAU À CONFIRMER PAR L’IUGM' : 'BROCHURE IUGM · À CONFIRMER'"
-        class="hidden sm:inline"
-      />
-      <span
+      </Badge>
+    </CardHeader>
+    <CardContent class="flex flex-1 flex-col gap-2">
+      <h3 class="m-0 flex-1 text-base leading-snug font-semibold text-balance">
+        <!-- Lien étendu à toute la carte (after:inset-0). -->
+        <NuxtLink
+          :to="`/formations/${program.slug}`"
+          class="text-foreground no-underline after:absolute after:inset-0 after:rounded-xl group-hover:text-primary hover:text-primary"
+        >
+          {{ program.title }}
+        </NuxtLink>
+      </h3>
+      <p class="m-0 text-sm text-foreground-muted">
+        {{ program.admission }}
+      </p>
+    </CardContent>
+    <CardFooter class="justify-end">
+      <ArrowRight
+        class="size-4 shrink-0 text-primary transition-transform duration-150 group-hover:translate-x-0.5"
         aria-hidden="true"
-        class="shrink-0 text-sm font-semibold text-primary"
-      >Fiche →</span>
-    </div>
-  </article>
+      />
+    </CardFooter>
+  </Card>
 </template>

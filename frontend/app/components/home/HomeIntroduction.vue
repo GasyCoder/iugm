@@ -7,54 +7,49 @@ import { institution } from '~/data/institution'
   <IugmSection
     id="institut"
     labelledby="intro-title"
-    tone="surface"
-    spacing="top"
-    content-class="grid grid-cols-1 gap-10 pb-16 md:pb-24 lg:grid-cols-[1.2fr_1fr] lg:gap-20"
   >
-    <div
-      v-reveal
-      class="flex flex-col gap-6"
-    >
-      <IugmEyebrow
-        id="intro-title"
-        as="h2"
-      >
-        L’IUGM en bref
-      </IugmEyebrow>
-      <p class="m-0 font-serif text-quote text-pretty text-primary-strong italic">
-        {{ manifesto.quote }}
-      </p>
-      <p class="m-0 flex items-center gap-3 text-sm text-foreground-muted">
-        <IugmLogo
-          :size="36"
-          plain
-          class="size-9"
+    <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+      <div class="flex flex-col items-start gap-5">
+        <IugmSectionHeading
+          id="intro-title"
+          title="L’IUGM"
+          highlight="en bref"
         />
-        Devise de l’Institut&#8239;:
-        <em class="font-serif text-lg text-baobab">{{ institution.motto }}</em>
-      </p>
+        <p class="m-0 leading-relaxed text-pretty">
+          {{ manifesto.quote }}
+        </p>
+        <p class="m-0 flex items-center gap-3 text-sm text-foreground-muted">
+          <IugmLogo
+            :size="36"
+            plain
+            class="size-9"
+          />
+          <span>
+            Devise de l’Institut&#8239;:
+            <em class="font-medium text-baobab not-italic">{{ institution.motto }}</em>
+          </span>
+        </p>
+        <IugmArrowLink
+          to="/formations"
+          variant="outline"
+          size="default"
+        >
+          Accéder aux formations
+        </IugmArrowLink>
+      </div>
+
+      <HomeKeyFigures />
     </div>
 
-    <ol class="m-0 flex list-none flex-col p-0">
-      <li
+    <ol class="m-0 mt-12 grid list-none gap-4 p-0 md:grid-cols-3">
+      <IugmStepCard
         v-for="(pillar, index) in pillars"
         :key="pillar.number"
         v-reveal="index * 90"
-        class="grid grid-cols-[2.5rem_1fr] gap-3 border-t border-border py-5 last:border-b"
-      >
-        <span
-          aria-hidden="true"
-          class="pt-1 font-mono text-xs text-accent-text"
-        >{{ pillar.number }}</span>
-        <div class="flex flex-col gap-1">
-          <h3 class="m-0 text-lg font-bold lg:text-xl">
-            {{ pillar.title }}
-          </h3>
-          <p class="m-0 text-[15px] leading-relaxed text-foreground-muted">
-            {{ pillar.description }}
-          </p>
-        </div>
-      </li>
+        :number="index + 1"
+        :title="pillar.title"
+        :description="pillar.description"
+      />
     </ol>
   </IugmSection>
 </template>

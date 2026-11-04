@@ -1,6 +1,6 @@
 <script setup lang="ts">
 withDefaults(defineProps<{
-  as?: 'span' | 'p' | 'h2'
+  as?: 'span' | 'p'
   tone?: 'light' | 'dark'
 }>(), {
   as: 'span',
@@ -11,7 +11,7 @@ withDefaults(defineProps<{
 <template>
   <component
     :is="as"
-    class="m-0 font-mono text-xs font-normal tracking-[0.12em] uppercase"
+    class="m-0 text-sm font-medium"
     :class="tone === 'dark' ? 'text-iugm-green-300' : 'text-accent-text'"
   >
     <slot />

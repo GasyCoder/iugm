@@ -3,27 +3,24 @@ import { cva } from 'class-variance-authority'
 
 export { default as Button } from './Button.vue'
 
-/**
- * Boutons IUGM (prototype v2 + Fondations « Boutons, badges, liens ») :
- * pilules, cible tactile ≥ 44 px, 52 px par défaut, focus clavier vert (base CSS).
- */
+/** Boutons shadcn-vue : mêmes proportions et même anneau de focus, avec deux variantes pour les fonds bleus (light, outlineLight). */
 export const buttonVariants = cva(
-  'group/button inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full font-semibold whitespace-nowrap no-underline transition duration-150 ease-out-soft select-none disabled:pointer-events-none disabled:bg-sand-200 disabled:text-foreground-muted aria-disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=size-])]:size-4',
+  'group/button inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap no-underline transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=size-])]:size-4',
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground hover:bg-iugm-blue-800 hover:text-primary-foreground',
-        outline: 'border-[1.5px] border-primary bg-transparent text-primary hover:bg-iugm-blue-50 hover:text-primary',
-        light: 'bg-white text-primary hover:bg-iugm-blue-50 hover:text-primary',
-        outlineLight: 'border-[1.5px] border-white/75 bg-transparent text-white hover:bg-white/10 hover:text-white',
-        ghost: 'bg-transparent text-foreground hover:bg-sand-200 hover:text-foreground',
-        link: 'h-auto rounded-none px-0 text-primary hover:text-accent-text',
+        default: 'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground',
+        outline: 'border bg-background text-foreground shadow-xs hover:bg-accent hover:text-accent-foreground',
+        light: 'bg-white text-primary shadow-xs hover:bg-white/90 hover:text-primary',
+        outlineLight: 'border border-white/50 bg-transparent text-white hover:bg-white/10 hover:text-white',
+        ghost: 'text-foreground hover:bg-accent hover:text-accent-foreground',
+        link: 'text-primary underline-offset-4 hover:underline',
       },
       size: {
-        default: 'h-13 px-6 text-base',
-        md: 'h-12 px-7 text-base',
-        sm: 'h-11 px-5 text-sm',
-        icon: 'size-11',
+        default: 'h-9 px-4 py-2',
+        sm: 'h-8 gap-1.5 px-3',
+        lg: 'h-10 px-6',
+        icon: 'size-9',
       },
     },
     defaultVariants: {

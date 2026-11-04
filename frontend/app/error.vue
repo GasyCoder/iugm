@@ -21,7 +21,7 @@ usePageSeo({
       :eyebrow="`Erreur ${error.statusCode}`"
       :title="title"
     >
-      <p class="m-0 max-w-2xl text-base text-iugm-blue-100 md:text-lg">
+      <p class="m-0 max-w-2xl leading-relaxed text-foreground-muted">
         {{ isNotFound
           ? 'Cette adresse ne correspond à aucune page du site. Elle a peut-être changé ou contient une erreur.'
           : 'La page n’a pas pu s’afficher. Vous pouvez réessayer ou revenir à l’accueil.' }}
@@ -32,7 +32,8 @@ usePageSeo({
         </IugmArrowLink>
         <Button
           as-child
-          variant="outlineLight"
+          size="lg"
+          variant="outline"
         >
           <NuxtLink to="/">
             Retour à l’accueil

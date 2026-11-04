@@ -1,31 +1,26 @@
 <script setup lang="ts">
-import { news } from '~/data/home'
+import { publishedNews } from '~/data/home'
 </script>
 
 <template>
   <IugmSection
     id="actualites"
     labelledby="actus-title"
+    tone="muted"
     content-class="flex flex-col gap-8"
   >
-    <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-      <IugmSectionHeading
-        id="actus-title"
-        eyebrow="Actualités"
-        title="La vie de l’Institut."
-      />
-      <IugmPendingTag label="ACTUALITÉS DU PROTOTYPE · À CONFIRMER PAR L’IUGM" />
-    </div>
+    <IugmSectionHeading
+      id="actus-title"
+      title="La vie de"
+      highlight="l’Institut."
+    />
 
-    <!-- Mobile : 1 actualité principale + secondaires compactes (Fondations). -->
-    <div class="flex flex-col md:grid md:grid-cols-2 md:gap-8 lg:grid-cols-[1.4fr_1fr_1fr] lg:gap-6">
+    <div class="grid gap-4 md:grid-cols-3">
       <NewsCard
-        v-for="(item, index) in news"
+        v-for="(item, index) in publishedNews"
         :key="item.id"
         v-reveal="index * 100"
         :item="item"
-        :compact-on-mobile="index > 0"
-        :class="index === 0 ? 'mb-5 md:mb-0' : undefined"
       />
     </div>
   </IugmSection>

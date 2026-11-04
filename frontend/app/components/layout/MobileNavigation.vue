@@ -1,21 +1,30 @@
 <script setup lang="ts">
+import type { Component } from 'vue'
 import type { NavItem } from '~/types/navigation'
 import { useMediaQuery } from '@vueuse/core'
+import { FileCheck, GraduationCap, Handshake, Info, Mail, Menu, Users, X } from '@lucide/vue'
 import { DialogClose, DialogContent, DialogDescription, DialogOverlay, DialogPortal, DialogTitle } from 'reka-ui'
 import { applyLink, mobileNavigation } from '~/data/navigation'
 import { contacts, institution } from '~/data/institution'
 
 defineProps<{
-  /** Style du bouton d'ouverture : sur fond clair (header opaque) ou sur photo. */
-  solid: boolean
   activeSection: string | null
 }>()
 
-const open = ref(false)
-const keyword = ref('')
+const open = useMobileMenu()
+const keyword = ref<string | number>('')
 const route = useRoute()
 const { focusSection } = useSectionNavigation()
 const mainPhone = contacts.mainPhones[0]
+
+const icons: Record<string, Component> = {
+  'L’Institut': Info,
+  'Formations': GraduationCap,
+  'Admissions': FileCheck,
+  'Vie étudiante': Users,
+  'Entreprises': Handshake,
+  'Contact': Mail,
+}
 
 /**
  * Section choisie dans le menu. À la fermeture, le focus va vers cette destination ;
@@ -44,7 +53,7 @@ function onCloseAutoFocus(event: Event) {
 
 // Recherche rapide : le catalogue s'ouvre avec le mot-clé, tous niveaux et domaines confondus.
 async function onSearch() {
-  const q = keyword.value.trim()
+  const q = String(keyword.value).trim()
   close()
   await navigateTo({ path: '/formations', query: q ? { q } : {} })
 }
@@ -61,28 +70,24 @@ watch(isDesktop, (desktop) => {
 <template>
   <Dialog v-model:open="open">
     <DialogTrigger as-child>
-      <button
-        type="button"
-        class="flex size-11 cursor-pointer flex-col items-center justify-center gap-1.25 rounded-full border bg-transparent transition-colors duration-200 xl:hidden"
-        :class="solid ? 'border-border text-foreground' : 'border-white/45 text-white'"
+      <Button
+        variant="ghost"
+        size="icon"
+        class="xl:hidden"
         aria-label="Ouvrir le menu"
       >
-        <span
+        <Menu
+          class="size-5"
           aria-hidden="true"
-          class="block h-[1.5px] w-4.5 bg-current"
         />
-        <span
-          aria-hidden="true"
-          class="block h-[1.5px] w-4.5 bg-current"
-        />
-      </button>
+      </Button>
     </DialogTrigger>
 
     <DialogPortal>
       <!-- L'overlay porte aussi le verrouillage du scroll de la page (reka-ui). -->
-      <DialogOverlay class="fixed inset-0 z-50 bg-iugm-blue-950 duration-240 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 xl:hidden" />
+      <DialogOverlay class="fixed inset-0 z-60 bg-black/50 duration-240 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 xl:hidden" />
       <DialogContent
-        class="fixed inset-0 z-50 flex flex-col bg-iugm-blue-900 text-white focus-on-dark duration-240 ease-out-soft outline-none data-open:animate-in data-open:fade-in-0 data-open:slide-in-from-top-2 data-closed:animate-out data-closed:fade-out-0 data-closed:slide-out-to-top-2 xl:hidden"
+        class="fixed inset-y-0 right-0 z-60 flex w-[88%] max-w-sm flex-col bg-background shadow-lg duration-240 ease-out-soft outline-none data-open:animate-in data-open:slide-in-from-right data-closed:animate-out data-closed:slide-out-to-right xl:hidden"
         @close-auto-focus="onCloseAutoFocus"
       >
         <DialogTitle class="sr-only">
@@ -92,65 +97,80 @@ watch(isDesktop, (desktop) => {
           Navigation principale et recherche de formation
         </DialogDescription>
 
-        <div class="flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-5">
+        <div class="flex h-16 shrink-0 items-center justify-between border-b px-4">
           <span class="flex items-center gap-3">
-            <!-- Taille du header : le menu n'étant pas pré-rendu, seule une variante déjà générée existe en statique. -->
-            <IugmLogo
-              :size="48"
-              class="size-10"
-            />
-            <span class="text-lg font-extrabold">{{ institution.acronym }}</span>
+            <span class="grid size-10 place-items-center rounded-lg bg-white p-0.5 ring-1 ring-border">
+              <!-- Taille du header : le menu n'étant pas pré-rendu, seule une variante déjà générée existe en statique. -->
+              <IugmLogo
+                :size="48"
+                plain
+                class="size-full"
+              />
+            </span>
+            <span class="flex flex-col leading-tight">
+              <span class="text-[15px] font-bold tracking-tight">{{ institution.acronym }}</span>
+              <span class="text-xs text-foreground-muted">{{ institution.parent }}</span>
+            </span>
           </span>
-          <DialogClose
-            class="flex size-11 cursor-pointer items-center justify-center rounded-full border border-white/30 bg-transparent text-lg text-white"
-            aria-label="Fermer le menu"
-          >
-            <span aria-hidden="true">✕</span>
+          <DialogClose as-child>
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label="Fermer le menu"
+            >
+              <X
+                class="size-5"
+                aria-hidden="true"
+              />
+            </Button>
           </DialogClose>
         </div>
 
         <form
           role="search"
-          class="px-5 pt-4"
+          class="px-4 pt-4"
           @submit.prevent="onSearch"
         >
-          <label
+          <Label
             for="mobile-program-search"
             class="sr-only"
-          >Trouvez votre formation</label>
-          <input
+          >
+            Trouvez votre formation
+          </Label>
+          <Input
             id="mobile-program-search"
             v-model="keyword"
             type="search"
             enterkeyhint="search"
             placeholder="Trouvez votre formation…"
-            class="h-12 w-full rounded-full border-0 bg-white/10 px-5 text-[15px] text-white placeholder:text-iugm-blue-100"
-          >
+          />
         </form>
 
         <nav
           aria-label="Navigation principale"
-          class="flex-1 overflow-y-auto px-5 py-2"
+          class="flex flex-1 flex-col gap-0.5 overflow-y-auto px-2 py-3"
         >
           <AppNavLink
             v-for="item in mobileNavigation"
             :key="item.label"
             :to="item.to"
             :aria-current="navItemCurrent(item, route.path, activeSection)"
-            class="flex h-14 items-center justify-between border-b border-white/10 text-lg font-semibold text-white no-underline hover:text-iugm-green-300 aria-[current=location]:text-iugm-green-300 aria-[current=page]:text-iugm-green-300"
+            class="flex min-h-12 items-center gap-3 rounded-lg px-3 text-base font-medium text-foreground no-underline hover:bg-accent hover:text-foreground aria-[current]:bg-accent aria-[current]:text-primary"
             @navigate="onNavigate(item)"
           >
-            {{ item.label }}<span
+            <component
+              :is="icons[item.label]"
+              class="size-5 text-foreground-muted"
               aria-hidden="true"
-              class="text-iugm-green-300"
-            >→</span>
+            />
+            {{ item.label }}
           </AppNavLink>
         </nav>
 
-        <div class="flex shrink-0 flex-col gap-3 border-t border-white/10 px-5 pt-4 pb-7">
+        <div class="flex shrink-0 flex-col gap-3 border-t px-4 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
           <Button
             as-child
-            variant="light"
+            size="lg"
           >
             <AppNavLink
               :to="applyLink.to"
@@ -161,13 +181,9 @@ watch(isDesktop, (desktop) => {
           </Button>
           <p
             v-if="mainPhone"
-            class="m-0 text-center text-sm text-iugm-blue-100"
+            class="m-0 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-sm text-foreground-muted"
           >
-            <IugmContactLink
-              :point="mainPhone"
-              tone="dark"
-              class="text-iugm-blue-100 no-underline hover:text-white"
-            />
+            <IugmContactLink :point="mainPhone" />
             · {{ institution.mainCampus.name }}
           </p>
         </div>

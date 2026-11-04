@@ -2,16 +2,21 @@
 @import "tw-animate-css";
 
 /*
- * IUGM design tokens.
- * Source : design/nuxt/assets/css/main.css (Claude Design, Accueil v2)
- * complété par design/IUGM Fondations.dc.html.
- * Couleurs de marque relevées sur le logo raster transmis
- * (#0620C5, #069506, #4C0103) — à revérifier sur le fichier vectoriel officiel.
+ * Tokens IUGM.
+ * Structure, typographie, rayons et rythme repris du portail EDEN de l'Université de Mahajanga
+ * (eden.mahajanga-univ.mg), avec l'identité de l'IUGM : couleurs relevées sur le logo raster transmis
+ * (#0620C5, #069506, #4C0103), à revérifier sur le fichier vectoriel officiel.
  */
 
 /* reka-ui expose l'état via data-state ; les composants shadcn utilisent data-open / data-closed. */
 @custom-variant data-open (&[data-state="open"]);
 @custom-variant data-closed (&[data-state="closed"]);
+@custom-variant data-active (&[data-state="active"]);
+@custom-variant data-horizontal (&[data-orientation="horizontal"]);
+@custom-variant data-vertical (&[data-orientation="vertical"]);
+
+/* Pas de thème sombre : les classes dark: de shadcn-vue ne suivent pas le réglage du téléphone. */
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* Anneau shadcn : suit le contexte clair/sombre (--focus-ring). */
 @theme inline {
@@ -19,25 +24,15 @@
 }
 
 @theme {
-  /* Typographie — familles chargées par @nuxt/fonts */
-  --font-sans: "Schibsted Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Newsreader", Georgia, serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  /* Typographie — famille chargée par @nuxt/fonts */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  /* Échelle fluide : compacte (v2) sur mobile, impact Fondations sur desktop. 360px → 1440px */
-  --text-h1: clamp(2.5rem, 2rem + 2.222vw, 4rem);
-  --text-h1--line-height: 1.05;
-  --text-h1--letter-spacing: -0.03em;
-  --text-h2: clamp(1.875rem, 1.583rem + 1.296vw, 2.75rem);
-  --text-h2--line-height: 1.08;
-  --text-h2--letter-spacing: -0.025em;
-  /* Citations Newsreader (manifeste) : 24px → 38px */
-  --text-quote: clamp(1.5rem, 1.208rem + 1.296vw, 2.375rem);
-  --text-quote--line-height: 1.22;
-  /* Chiffres clés : 30px → 48px */
-  --text-figure: clamp(1.875rem, 1.5rem + 1.667vw, 3rem);
-  --text-figure--line-height: 1;
-  --text-figure--letter-spacing: -0.035em;
+  /* Rayons : 6, 8, 10, 14 et 18 px */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.625rem;
+  --radius-xl: 0.875rem;
+  --radius-2xl: 1.125rem;
 
   /* IUGM Blue — primaire, institution */
   --color-iugm-blue-50: oklch(0.97 0.02 266);
@@ -68,27 +63,21 @@
   /* Brun baobab — accent rare (devise) */
   --color-baobab: #4c0103;
 
-  /* Neutres sable */
-  --color-sand-50: oklch(0.99 0.003 85);
-  --color-sand-100: oklch(0.975 0.006 85);
-  --color-sand-200: oklch(0.93 0.009 85);
-  --color-sand-300: oklch(0.88 0.011 85);
-
-  /* Sémantique IUGM */
-  --color-background: var(--color-sand-100);
-  --color-foreground: oklch(0.2 0.03 266);
-  --color-foreground-muted: oklch(0.45 0.02 266);
-  --color-surface: var(--color-sand-50);
-  --color-surface-muted: var(--color-iugm-blue-50);
-  --color-border: var(--color-sand-300);
+  /* Sémantique : le blanc domine, le gris bleuté alterne les sections */
+  --color-background: #ffffff;
+  --color-foreground: #10131a;
+  --color-foreground-muted: #5c6372;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f5f6fa;
+  --color-border: #e3e6ee;
   --color-primary: var(--color-iugm-blue-700);
-  --color-primary-strong: var(--color-iugm-blue-900);
-  --color-primary-foreground: oklch(1 0 0);
+  --color-primary-foreground: #ffffff;
   --color-secondary: var(--color-iugm-green-500);
-  --color-secondary-foreground: oklch(1 0 0);
+  --color-secondary-foreground: #ffffff;
   --color-accent-text: var(--color-iugm-green-700);
   --color-success: var(--color-iugm-green-700);
-  --color-warning: oklch(0.48 0.1 60);
+  --color-warning: oklch(0.45 0.1 65);
+  --color-warning-surface: oklch(0.97 0.04 95);
   --color-danger: oklch(0.55 0.19 25);
   --color-pending-on-dark: oklch(0.962 0.059 95.617);
 
@@ -106,40 +95,55 @@
   --color-card-foreground: var(--color-foreground);
   --color-popover: var(--color-surface);
   --color-popover-foreground: var(--color-foreground);
-  --color-muted: var(--color-sand-200);
+  --color-muted: var(--color-surface-muted);
   --color-muted-foreground: var(--color-foreground-muted);
   --color-accent: var(--color-iugm-blue-50);
-  --color-accent-foreground: var(--color-primary-strong);
+  --color-accent-foreground: var(--color-iugm-blue-900);
   --color-destructive: var(--color-danger);
-  --color-input: var(--color-border);
+  --color-input: #d7dbe5;
 
-  /* Ombre unique : survol des cards ; header opaque */
-  --shadow-card-hover: 0 14px 32px -18px rgb(13 21 80 / 0.4);
-  --shadow-header: 0 6px 20px -14px rgb(13 21 80 / 0.35);
+  /* Diaporama du Hero : zoom lent des photos, progression (7 s par photo) */
+  --animate-hero-zoom: hero-zoom 18s ease-in-out infinite alternate;
+  --animate-hero-progress: hero-progress 7s linear both;
 
-  /* Mouvement (Fondations) : fast 150, base 240, reveal 500 */
+  @keyframes hero-zoom {
+    from { transform: scale(1); }
+    to { transform: scale(1.08); }
+  }
+
+  @keyframes hero-progress {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+
+  /* Mouvement : fast 150, base 240, reveal 500 */
   --ease-out-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 :root {
-  --radius: 0.25rem;
-  /* Anneau de focus : vert IUGM foncé sur surfaces claires (≥ 3:1), vert clair sur fonds sombres (focus-on-dark). */
-  --focus-ring: var(--color-iugm-green-700);
-  --header-height: 4rem;
+  /* Anneau de focus : bleu IUGM sur surfaces claires, vert clair sur fonds sombres (focus-on-dark). */
+  --focus-ring: var(--color-iugm-blue-500);
+  --header-height: 4.25rem;
+  /* Barre d'onglets mobile : les éléments fixés en bas se placent au-dessus. */
+  --tabbar-height: calc(4rem + env(safe-area-inset-bottom));
 }
 
 @media (width >= 64rem) {
   :root {
-    --header-height: 5rem;
+    --tabbar-height: 0px;
   }
 }
 
 @layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
   html {
     scroll-behavior: smooth;
   }
 
-  /* Ancres : compenser le header fixe (lu par le scrollBehavior de Nuxt). */
+  /* Ancres : compenser le header collant (lu par le scrollBehavior de Nuxt). */
   [id] {
     scroll-margin-top: calc(var(--header-height) + 0.5rem);
   }
@@ -148,17 +152,21 @@
     @apply bg-background font-sans text-foreground antialiased;
   }
 
+  ::selection {
+    @apply bg-iugm-blue-100 text-iugm-blue-950;
+  }
+
   a {
     color: var(--color-primary);
   }
 
   a:hover {
-    color: var(--color-accent-text);
+    color: var(--color-iugm-blue-800);
   }
 
   :focus-visible {
     outline: 3px solid var(--focus-ring);
-    outline-offset: 3px;
+    outline-offset: 2px;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -181,16 +189,19 @@
   --focus-ring: var(--color-iugm-green-300);
 }
 
-/* Gouttière horizontale des pages (prototype v2 : 20 / 40 / 64 px). */
-@utility px-gutter {
-  padding-inline: 1.25rem;
+/* Conteneur des pages : 1280 px au maximum, gouttière 16 / 24 / 32 px. */
+@utility page-container {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
 
-  @media (width >= 48rem) {
-    padding-inline: 2.5rem;
+  @media (width >= 40rem) {
+    padding-inline: 1.5rem;
   }
 
-  @media (width >= 80rem) {
-    padding-inline: 4rem;
+  @media (width >= 64rem) {
+    padding-inline: 2rem;
   }
 }
 

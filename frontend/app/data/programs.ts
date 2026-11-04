@@ -36,7 +36,7 @@ const seeds: ProgramSeed[] = [
   { level: 'master', domain: 'marketing', title: 'Marketing et Communication', admission: 'Mention Marketing' },
   { level: 'master', domain: 'marketing', title: 'Commerce International', admission: 'Mention Marketing' },
   { level: 'master', domain: 'management', title: 'Ressources Humaines', admission: 'Mention Management' },
-  { level: 'master', domain: 'management', title: 'MBA — Management of Business Administration', admission: 'Mention Management' },
+  { level: 'master', domain: 'management', title: 'MBA : Management of Business Administration', admission: 'Mention Management' },
   { level: 'master', domain: 'economie', title: 'Économie Internationale, Finances et Modélisation', admission: 'Mention Économie' },
   { level: 'master', domain: 'economie', title: 'Banque, Microfinance et Assurance', admission: 'Mention Économie' },
   { level: 'master', domain: 'economie', title: 'Économie de Développement Durable et Territorial', admission: 'Mention Économie' },

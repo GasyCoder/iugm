@@ -2,11 +2,16 @@
  * Statut de vérification d'une donnée institutionnelle.
  * - verified : validée par l'IUGM ;
  * - brochure : reprise d'un support IUGM (brochure), à confirmer pour le site ;
- * - pending  : non sourcée, affichée « À CONFIRMER PAR L'IUGM ».
+ * - pending  : non sourcée, jamais affichée au public.
  */
 export type VerificationStatus = 'verified' | 'brochure' | 'pending'
 
-export type MediaRightsStatus = 'cleared' | 'pending'
+/**
+ * - cleared : accord écrit des ayants droit obtenu ;
+ * - project-approved : publication demandée par le responsable du projet, accord écrit à joindre ;
+ * - pending : non publiable.
+ */
+export type MediaRightsStatus = 'cleared' | 'project-approved' | 'pending'
 
 export interface MediaImage {
   /** Nom du fichier conservé dans les ressources locales de conception, pas une URL publique. */
@@ -19,6 +24,27 @@ export interface MediaImage {
   /** Crédit photo lu dans les métadonnées du fichier source, le cas échéant. */
   credit?: string
   rights: MediaRightsStatus
+}
+
+export interface HeroSlide {
+  key: string
+  /** Début du chemin des fichiers publiés : `{base}-{largeur}.webp`. */
+  base: string
+  image: MediaImage
+  title: string
+  subtitle: string
+  /** Cadrage CSS object-position. */
+  position: string
+}
+
+export interface DirectorMessage {
+  /** `null` tant que le texte n'est pas transmis par l'IUGM. */
+  quote: string | null
+  author: string | null
+  role: string | null
+  /** `base` : début du chemin des fichiers `{base}-{largeur}.webp`. */
+  photo: { base: string, alt: string, width: number, height: number } | null
+  status: VerificationStatus
 }
 
 export interface Pillar {

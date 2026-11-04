@@ -2,13 +2,9 @@
 import type { NewsCategory, NewsItem } from '~/types/content'
 import { newsCategoryLabels } from '~/data/home'
 
-withDefaults(defineProps<{
+defineProps<{
   item: NewsItem
-  /** Mobile : ligne compacte (vignette + titre). Dès md : carte complète. */
-  compactOnMobile?: boolean
-}>(), {
-  compactOnMobile: false,
-})
+}>()
 
 const categoryClass: Record<NewsCategory, string> = {
   alumni: 'bg-iugm-blue-50 text-primary',
@@ -19,34 +15,24 @@ const categoryClass: Record<NewsCategory, string> = {
 
 <template>
   <!-- Pas de page d'actualité publiée : carte non cliquable. -->
-  <article
-    class="group"
-    :class="compactOnMobile
-      ? 'grid grid-cols-[6rem_1fr] items-start gap-3.5 border-t border-border py-3.5 md:flex md:flex-col md:gap-3 md:border-0 md:py-0'
-      : 'flex flex-col gap-3'"
-  >
+  <Card class="pt-0">
     <IugmImagePlaceholder
       :subject="item.image.alt"
-      :bare="compactOnMobile"
-      class="aspect-4/3 w-full rounded"
+      class="aspect-video w-full"
     />
-    <div class="flex min-w-0 flex-col gap-2 md:gap-3">
-      <div class="flex flex-wrap items-center gap-2">
-        <span
-          class="rounded-sm px-2 py-1 text-xs font-semibold"
-          :class="categoryClass[item.category]"
-        >{{ newsCategoryLabels[item.category] }}</span>
-        <IugmPendingTag
-          v-if="!item.date"
-          label="DATE À CONFIRMER"
-        />
-      </div>
-      <h3
-        class="m-0 leading-snug font-bold text-balance"
-        :class="compactOnMobile ? 'text-base md:text-lg' : 'text-lg'"
+    <CardHeader class="gap-3">
+      <Badge
+        variant="outline"
+        class="border-transparent"
+        :class="categoryClass[item.category]"
       >
-        {{ item.title }}
-      </h3>
-    </div>
-  </article>
+        {{ newsCategoryLabels[item.category] }}
+      </Badge>
+      <CardTitle>
+        <h3 class="m-0 text-base leading-snug font-semibold text-balance">
+          {{ item.title }}
+        </h3>
+      </CardTitle>
+    </CardHeader>
+  </Card>
 </template>

@@ -12,5 +12,8 @@
   ! Cache-Control
   Cache-Control: public, max-age=0, must-revalidate
 
+/images/hero/*
+  Cache-Control: public, max-age=604800
+
 /_ipx/*
   Cache-Control: public, max-age=604800

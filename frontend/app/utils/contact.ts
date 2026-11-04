@@ -12,6 +12,11 @@ export function contactHref(point: ContactPoint): string | undefined {
   return point.channel === 'phone' ? `tel:${point.target}` : `mailto:${point.target}`
 }
 
+/** Une coordonnée sans source (`pending`) n'est pas affichée : le public la prendrait pour officielle. */
+export function isPublishable(point: ContactPoint): boolean {
+  return point.status !== 'pending'
+}
+
 export function phoneContact(phone: PhoneContact, status: VerificationStatus): ContactPoint {
   return { channel: 'phone', display: phone.display, target: phone.e164, status }
 }

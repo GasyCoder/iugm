@@ -1,81 +1,81 @@
 <script setup lang="ts">
 import { hero } from '~/data/home'
 import { institution } from '~/data/institution'
+import { heroSlides, heroThumbnailWidth } from '~/data/media'
 
-const nameWords = institution.name.split(' ')
-const highlighted = new Set(['Institut', 'Universitaire', 'Gestion', 'Management'])
+const slider = useHeroSlider(heroSlides.length)
 </script>
 
 <template>
-  <div class="relative isolate">
-    <section
-      aria-labelledby="hero-title"
-      class="relative isolate h-svh max-h-240 min-h-160 w-full overflow-hidden bg-iugm-blue-900 text-white focus-on-dark"
-    >
-      <IugmConcentricCircles />
-      <div
-        aria-hidden="true"
-        class="absolute inset-0 -z-10 bg-linear-to-b from-iugm-blue-950/90 via-iugm-blue-950/75 via-60% to-iugm-blue-950/30"
-      />
-      <div
-        aria-hidden="true"
-        class="absolute inset-0 -z-10 bg-linear-to-r from-iugm-blue-950/60 via-iugm-blue-950/25 to-transparent"
-      />
-
-      <div class="flex h-full w-full flex-col justify-center px-gutter pt-16 pb-12 lg:pb-52 xl:pb-36">
-        <div class="flex max-w-3xl flex-col gap-5 lg:max-w-4xl">
-          <div class="flex items-center gap-3 text-xs font-semibold tracking-[0.16em]">
-            <IugmColonnadeBars />
-            {{ institution.parent.toUpperCase() }}
-          </div>
-          <p class="m-0 text-base font-medium text-iugm-blue-100 md:text-lg">
-            <strong class="font-extrabold text-white">{{ institution.acronym }}</strong> —
-            <template
-              v-for="(word, index) in nameWords"
-              :key="`${word}-${index}`"
-            >
-              <template v-if="highlighted.has(word)">
-                <span class="font-bold text-iugm-green-300">{{ word.charAt(0) }}</span>{{ word.slice(1) }}
-              </template>
-              <template v-else>
-                {{ word }}
-              </template>
-              {{ ' ' }}
-            </template>
-          </p>
-          <h1
-            id="hero-title"
-            class="m-0 text-h1 font-semibold text-balance"
+  <section
+    aria-labelledby="hero-title"
+    class="relative overflow-hidden bg-background"
+  >
+    <div class="page-container grid items-center gap-10 py-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.08fr)] lg:gap-16 lg:pt-16 lg:pb-14">
+      <div class="order-2 lg:order-1">
+        <p class="m-0 text-sm font-medium text-accent-text">
+          {{ institution.acronym }} · {{ institution.parent }}
+        </p>
+        <h1
+          id="hero-title"
+          class="mt-3 mb-0 text-3xl leading-tight font-semibold tracking-tight text-balance sm:text-4xl"
+        >
+          {{ hero.title }}
+          <span class="text-primary">{{ hero.titleHighlight }}</span>
+        </h1>
+        <p class="mt-5 mb-0 max-w-xl leading-relaxed text-pretty text-foreground-muted">
+          {{ institution.name }}. {{ hero.tagline }}
+        </p>
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <Button
+            as-child
+            size="lg"
           >
-            {{ hero.title }}
-          </h1>
-          <p class="m-0 font-serif text-lg text-iugm-blue-50 italic md:text-xl">
-            {{ hero.tagline }}
-          </p>
-          <div class="mt-2 flex flex-col gap-3 sm:flex-row">
-            <IugmArrowLink to="/formations">
+            <NuxtLink to="/formations">
               Découvrir nos formations
-            </IugmArrowLink>
-            <Button
-              as-child
-              variant="outlineLight"
+            </NuxtLink>
+          </Button>
+          <IugmArrowLink
+            to="/admissions"
+            variant="outline"
+          >
+            Rejoindre l’IUGM
+          </IugmArrowLink>
+        </div>
+
+        <!-- Vignettes : navigation directe dans le diaporama. -->
+        <div class="mt-10 hidden items-center gap-3 lg:flex">
+          <button
+            v-for="(slide, index) in heroSlides"
+            :key="slide.key"
+            type="button"
+            :aria-label="`Afficher la photo : ${slide.title}`"
+            :aria-current="index === slider.active.value ? 'true' : undefined"
+            class="relative size-14 cursor-pointer overflow-hidden rounded-lg ring-offset-2 ring-offset-background transition duration-300"
+            :class="index === slider.active.value ? 'ring-2 ring-primary' : 'opacity-70 grayscale hover:opacity-100 hover:grayscale-0'"
+            @click="slider.go(index)"
+          >
+            <img
+              :src="`${slide.base}-${heroThumbnailWidth}.webp`"
+              alt=""
+              width="56"
+              height="56"
+              loading="lazy"
+              decoding="async"
+              class="size-full object-cover"
+              :style="{ objectPosition: slide.position }"
             >
-              <AppNavLink to="/admissions">
-                Rejoindre l’IUGM
-              </AppNavLink>
-            </Button>
-          </div>
+          </button>
         </div>
       </div>
 
-      <span class="absolute right-5 bottom-14 hidden font-mono text-[11px] tracking-widest text-iugm-blue-100 md:right-10 md:block lg:bottom-56 xl:right-16 xl:bottom-40">
-        MAHAJANGA · MADAGASCAR
-      </span>
-    </section>
+      <div class="order-1 lg:order-2">
+        <HomeHeroSlider :slider="slider" />
+      </div>
+    </div>
 
-    <!-- Recherche : carte qui chevauche le Hero (mobile) / panneau posé sur son bord inférieur (desktop). -->
-    <div class="relative z-10 -mt-9 bg-[linear-gradient(to_bottom,transparent_2.25rem,var(--color-surface)_2.25rem)] px-4 sm:px-6 md:px-10 lg:absolute lg:inset-x-0 lg:bottom-0 lg:mt-0 lg:bg-none xl:px-16">
+    <div class="page-container pb-12 lg:pb-16">
       <slot name="search" />
     </div>
-  </div>
+  </section>
 </template>

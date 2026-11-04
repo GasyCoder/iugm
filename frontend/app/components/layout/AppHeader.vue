@@ -1,18 +1,6 @@
 <script setup lang="ts">
-import { useMounted, useWindowScroll } from '@vueuse/core'
 import { applyLink, mainNavigation, mobileNavigation } from '~/data/navigation'
 import { institution } from '~/data/institution'
-
-const props = withDefaults(defineProps<{
-  /** Header transparent au-dessus d'un Hero photo, opaque après 40 px de scroll. */
-  overlay?: boolean
-}>(), {
-  overlay: false,
-})
-
-const isMounted = useMounted()
-const { y } = useWindowScroll()
-const solid = computed(() => !props.overlay || (isMounted.value && y.value > 40))
 
 // « formations » et « admissions » n'ont plus d'entrée de menu dédiée à leur section, mais délimitent les sections voisines.
 const sectionIds = [...new Set(['formations', 'admissions', ...mobileNavigation.flatMap(item => (item.sectionId ? [item.sectionId] : []))])]
@@ -21,71 +9,56 @@ const route = useRoute()
 </script>
 
 <template>
-  <header
-    class="fixed inset-x-0 top-0 z-40 border-b transition-colors duration-200 ease-out-soft"
-    :class="solid
-      ? 'border-border bg-sand-50/95 shadow-header backdrop-blur'
-      : 'border-white/15 bg-transparent focus-on-dark'"
-  >
-    <div class="w-full px-gutter">
-      <div class="flex h-16 items-center justify-between gap-6 lg:h-20">
-        <NuxtLink
-          to="/"
-          class="flex min-w-0 items-center gap-3 no-underline"
-          :aria-label="`${institution.acronym} — Accueil`"
-        >
+  <header class="sticky top-0 z-40 border-b bg-background/90 backdrop-blur-md supports-backdrop-filter:bg-background/80">
+    <div
+      aria-hidden="true"
+      class="h-1 bg-primary"
+    />
+    <div class="page-container flex h-16 items-center gap-6">
+      <NuxtLink
+        to="/"
+        class="flex min-w-0 shrink-0 items-center gap-3 rounded-md no-underline"
+        :aria-label="`${institution.acronym} — Accueil`"
+      >
+        <span class="grid size-11 shrink-0 place-items-center rounded-lg bg-white p-0.5 ring-1 ring-border">
           <IugmLogo
             :size="48"
-            class="size-10 lg:size-12"
+            plain
+            class="size-full"
           />
-          <span class="flex min-w-0 flex-col leading-tight">
-            <span
-              class="text-lg font-extrabold tracking-tight transition-colors duration-200 lg:text-xl"
-              :class="solid ? 'text-primary-strong' : 'text-white'"
-            >{{ institution.acronym }}</span>
-            <!-- Nom complet : une ligne, ou deux lignes quand la navigation complète occupe la barre (xl → 2xl). -->
-            <span
-              class="hidden truncate text-[11px] transition-colors duration-200 sm:block lg:text-xs xl:max-w-52 xl:whitespace-normal 2xl:max-w-none 2xl:whitespace-nowrap"
-              :class="solid ? 'text-foreground-muted' : 'text-iugm-blue-100'"
-            >{{ institution.name }}</span>
-          </span>
-        </NuxtLink>
+        </span>
+        <span class="flex min-w-0 flex-col leading-tight">
+          <span class="text-[15px] font-bold tracking-tight text-foreground">{{ institution.acronym }}</span>
+          <span class="truncate text-xs text-foreground-muted max-[25rem]:hidden">{{ institution.parent }}</span>
+        </span>
+      </NuxtLink>
 
-        <nav
-          aria-label="Navigation principale"
-          class="hidden items-center gap-7 text-[15px] font-medium whitespace-nowrap xl:flex"
+      <nav
+        aria-label="Navigation principale"
+        class="ml-auto hidden items-center gap-0.5 xl:flex"
+      >
+        <AppNavLink
+          v-for="item in mainNavigation"
+          :key="item.label"
+          :to="item.to"
+          :aria-current="navItemCurrent(item, route.path, activeSection)"
+          class="relative inline-flex h-9 items-center rounded-md px-3 text-sm font-medium whitespace-nowrap text-foreground-muted no-underline transition-colors duration-150 hover:bg-accent hover:text-foreground aria-[current]:text-foreground aria-[current]:hover:bg-transparent aria-[current]:after:absolute aria-[current]:after:inset-x-3 aria-[current]:after:-bottom-3.5 aria-[current]:after:h-0.5 aria-[current]:after:rounded-full aria-[current]:after:bg-primary"
         >
-          <AppNavLink
-            v-for="item in mainNavigation"
-            :key="item.label"
-            :to="item.to"
-            :aria-current="navItemCurrent(item, route.path, activeSection)"
-            class="relative no-underline transition-colors duration-150 after:absolute after:inset-x-0 after:-bottom-2 after:h-0.5 after:origin-left after:scale-x-0 after:bg-iugm-green-500 after:transition-transform after:duration-240 after:ease-out-soft aria-[current=location]:after:scale-x-100 aria-[current=page]:after:scale-x-100"
-            :class="solid
-              ? 'text-foreground hover:text-primary aria-[current=location]:text-primary aria-[current=page]:text-primary'
-              : 'text-white hover:text-iugm-green-300'"
-          >
-            {{ item.label }}
-          </AppNavLink>
-        </nav>
+          {{ item.label }}
+        </AppNavLink>
+      </nav>
 
-        <div class="flex shrink-0 items-center gap-2">
-          <Button
-            as-child
-            size="sm"
-            :variant="solid ? 'default' : 'light'"
-          >
-            <AppNavLink :to="applyLink.to">
-              <!-- Libellé court sur mobile : le libellé complet recouvrirait le logo. -->
-              <span class="sm:hidden">Admissions</span>
-              <span class="hidden sm:inline">{{ applyLink.label }}</span>
-            </AppNavLink>
-          </Button>
-          <MobileNavigation
-            :solid="solid"
-            :active-section="activeSection"
-          />
-        </div>
+      <div class="ml-auto flex shrink-0 items-center gap-2 xl:ml-0">
+        <Button
+          as-child
+          size="sm"
+          class="max-sm:hidden"
+        >
+          <AppNavLink :to="applyLink.to">
+            {{ applyLink.label }}
+          </AppNavLink>
+        </Button>
+        <MobileNavigation :active-section="activeSection" />
       </div>
     </div>
   </header>

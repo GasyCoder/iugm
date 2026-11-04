@@ -6,7 +6,7 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { basename, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { media } from '../app/data/media.ts'
+import { heroImageWidths, heroSlides, heroThumbnailWidth, media } from '../app/data/media.ts'
 import { programs } from '../app/data/programs.ts'
 
 const root = fileURLToPath(new URL('../.output/public/', import.meta.url))
@@ -27,10 +27,18 @@ const expected = [
   ['404.html', 'Page introuvable'],
   ...programs.map(program => [`formations/${program.slug}.html`, program.title]),
 ]
+for (const slide of heroSlides) {
+  for (const width of [heroThumbnailWidth, ...heroImageWidths]) {
+    expected.push([`${slide.base.slice(1)}-${width}.webp`, ''])
+  }
+}
+for (const width of [320, 640]) {
+  expected.push([`images/direction/directeur-${width}.webp`, ''])
+}
 for (const [file, content] of expected) {
   const path = join(root, file)
   if (!existsSync(path)) {
-    failures.push(`page absente : ${file}`)
+    failures.push(`fichier absent : ${file}`)
   }
   else if (!readFileSync(path, 'utf8').includes(content)) {
     failures.push(`contenu absent de ${file} : « ${content} »`)
@@ -52,6 +60,8 @@ for (const file of files.filter(file => pendingPhotos.has(basename(file)))) {
 const forbidden = [
   [/href="(tel|mailto):/, 'coordonnée actionnable'],
   [/localhost|127\.0\.0\.1/, 'adresse locale'],
+  [/À CONFIRMER|Prénom Nom|\[nom de/, 'mention ou contenu provisoire'],
+  [/<title>[^<]*—/, 'tiret long dans le titre'],
   [/APP_KEY|API_KEY|SECRET|PRIVATE KEY|base64:[A-Za-z0-9+/]{32}/, 'secret potentiel'],
 ]
 for (const file of htmlFiles) {
@@ -67,4 +77,4 @@ if (failures.length > 0) {
   console.error(`✖ ${failures.length} problème(s) :\n${failures.map(failure => `  - ${failure}`).join('\n')}`)
   process.exit(1)
 }
-console.log(`✔ ${expected.length} pages vérifiées, dont ${programs.length} fiches formation ; ${files.length} fichiers publiés.`)
+console.log(`✔ ${htmlFiles.length} pages vérifiées, dont ${programs.length} fiches formation ; ${heroSlides.length} photos du Hero ; ${files.length} fichiers publiés.`)

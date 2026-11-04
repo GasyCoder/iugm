@@ -2,11 +2,11 @@
 import { institution } from '~/data/institution'
 
 useHead({
-  titleTemplate: title => (title ? `${title} · ${institution.acronym}` : `${institution.acronym} — ${institution.name}`),
+  titleTemplate: title => (title ? `${title} · ${institution.acronym}` : `${institution.acronym} | ${institution.name}`),
 })
 
 useSeoMeta({
-  ogSiteName: `${institution.acronym} — ${institution.name}`,
+  ogSiteName: `${institution.acronym} | ${institution.name}`,
   ogLocale: 'fr_MG',
   ogType: 'website',
 })

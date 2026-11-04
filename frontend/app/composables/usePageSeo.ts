@@ -10,7 +10,7 @@ export function usePageSeo(options: { title?: string, description: string, noind
   const { siteUrl } = useRuntimeConfig().public
   const socialTitle = options.title
     ? `${options.title} · ${institution.acronym}`
-    : `${institution.acronym} — ${institution.name}`
+    : `${institution.acronym} | ${institution.name}`
   const canonical = siteUrl && !options.noindex ? new URL(route.path, siteUrl).href : undefined
 
   useSeoMeta({

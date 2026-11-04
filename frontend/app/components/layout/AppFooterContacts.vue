@@ -1,15 +1,11 @@
 <script setup lang="ts">
 import { contacts, institution } from '~/data/institution'
 
-const props = defineProps<{
+defineProps<{
   group: 'main' | 'regional'
 }>()
 
-const points = computed(() => (props.group === 'main'
-  ? [...contacts.mainPhones, contacts.email]
-  : contacts.regional.flatMap(campus => campus.phones)))
-
-const linkClass = 'text-white no-underline hover:text-iugm-green-300'
+const linkClass = 'break-words text-white no-underline hover:text-iugm-blue-100'
 </script>
 
 <template>
@@ -21,15 +17,13 @@ const linkClass = 'text-white no-underline hover:text-iugm-green-300'
       >
         <IugmContactLink
           :point="phone"
-          :show-pending="false"
           :class="linkClass"
           class="whitespace-nowrap"
         />
       </li>
-      <li>
+      <li v-if="isPublishable(contacts.email)">
         <IugmContactLink
           :point="contacts.email"
-          :show-pending="false"
           :class="linkClass"
         />
       </li>
@@ -60,18 +54,11 @@ const linkClass = 'text-white no-underline hover:text-iugm-green-300'
           </template>
           <IugmContactLink
             :point="phone"
-            :show-pending="false"
             :class="linkClass"
             class="whitespace-nowrap"
           />
         </template>
       </li>
     </template>
-    <li v-if="hasUnverified(points)">
-      <IugmPendingTag
-        tone="dark"
-        label="COORDONNÉES À CONFIRMER PAR L’IUGM"
-      />
-    </li>
   </ul>
 </template>
