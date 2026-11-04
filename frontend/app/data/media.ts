@@ -46,8 +46,14 @@ export const media = {
   },
 } satisfies Record<string, MediaImage>
 
+/**
+ * `src` en WebP : les déclinaisons pré-rendues gardent l'extension de la source,
+ * qui doit correspondre à leur format pour un Content-Type correct sur l'hébergement statique.
+ */
 export const logo = {
-  src: '/images/logo-iugm.png',
+  src: '/images/logo-iugm.webp',
+  /** Aperçus sociaux (og:image) : PNG universellement accepté. */
+  fallbackSrc: '/images/logo-iugm.png',
   width: 480,
   height: 480,
 }

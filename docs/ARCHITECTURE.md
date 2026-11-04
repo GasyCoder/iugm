@@ -19,6 +19,8 @@
 │   │   ├── types/
 │   │   └── utils/
 │   ├── public/
+│   ├── scripts/               # verify-static.mjs : contrôle du site généré
+│   ├── server/routes/         # robots.txt, sitemap.xml (pré-rendus)
 │   ├── nuxt.config.ts
 │   └── package.json
 ├── design/                    # Claude Design reference (local, read-only, not committed)
@@ -58,8 +60,9 @@ Use shadcn-vue as a source of accessible composable Vue UI primitives. Adapt it 
 - Material contract changes must be documented.
 
 ## Rendering
-- Prefer SSR for SEO-relevant public pages.
-- Use static/prerender only when justified.
+- Public pages are fully prerendered with `nuxt generate` and hosted on Cloudflare Pages (setup in `frontend/README.md`): their data is local and typed, and no feature needs a server yet.
+- Dynamic routes must be listed in `nitro.prerender.routes`; do not rely on the crawler to discover them.
+- Laravel stays the backend for future dynamic features. When one is added, reconsider SSR for the affected pages.
 - Use client-only rendering only for interactions that require it.
 
 ## Authentication

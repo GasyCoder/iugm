@@ -41,7 +41,10 @@ const groups: FooterGroup[] = [
 
         <!-- Mobile : contact direct en tête (Fondations). Inactif tant que les coordonnées ne sont pas vérifiées. -->
         <div class="flex flex-col gap-2 md:hidden">
-          <div class="grid grid-cols-2 gap-2.5">
+          <div
+            class="grid gap-2.5"
+            :class="hasUnverified(directContacts) ? 'grid-cols-1' : 'grid-cols-2'"
+          >
             <IugmContactLink
               v-for="point in directContacts"
               :key="point.channel"
@@ -49,13 +52,13 @@ const groups: FooterGroup[] = [
               :label="point.channel === 'phone' ? 'Appeler' : 'Écrire'"
               :show-pending="false"
               class="flex h-12 items-center justify-center rounded-full bg-white/10 text-sm font-semibold text-white no-underline hover:bg-white/15 hover:text-white"
-              pending-class="cursor-default border border-dashed border-white/25 bg-transparent text-iugm-blue-200 hover:bg-transparent hover:text-iugm-blue-200"
+              pending-class="cursor-default border border-dashed border-white/25 bg-transparent px-4 text-iugm-blue-100 hover:bg-transparent hover:text-iugm-blue-100"
             />
           </div>
           <IugmPendingTag
             v-if="hasUnverified(directContacts)"
             tone="dark"
-            label="COORDONNÉES À CONFIRMER PAR L’IUGM — VOIR CI-DESSOUS"
+            label="COORDONNÉES À CONFIRMER PAR L’IUGM"
           />
         </div>
 

@@ -13,8 +13,8 @@ defineProps<{
 
 const open = ref(false)
 const keyword = ref('')
-const { searchEverywhere } = useProgramFilters()
-const { goToSection, focusSection } = useSectionNavigation()
+const route = useRoute()
+const { focusSection } = useSectionNavigation()
 const mainPhone = contacts.mainPhones[0]
 
 /**
@@ -42,12 +42,11 @@ function onCloseAutoFocus(event: Event) {
   focusSection(id)
 }
 
-// Recherche rapide : le mot-clé porte sur tous les niveaux et domaines.
+// Recherche rapide : le catalogue s'ouvre avec le mot-clé, tous niveaux et domaines confondus.
 async function onSearch() {
-  searchEverywhere(keyword.value)
-  destination.value = 'formations'
+  const q = keyword.value.trim()
   close()
-  await goToSection('formations')
+  await navigateTo({ path: '/formations', query: q ? { q } : {} })
 }
 
 // Le menu est réservé aux écrans < xl : le refermer si la fenêtre s'élargit.
@@ -95,8 +94,9 @@ watch(isDesktop, (desktop) => {
 
         <div class="flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-5">
           <span class="flex items-center gap-3">
+            <!-- Taille du header : le menu n'étant pas pré-rendu, seule une variante déjà générée existe en statique. -->
             <IugmLogo
-              :size="40"
+              :size="48"
               class="size-10"
             />
             <span class="text-lg font-extrabold">{{ institution.acronym }}</span>
@@ -136,8 +136,8 @@ watch(isDesktop, (desktop) => {
             v-for="item in mobileNavigation"
             :key="item.label"
             :to="item.to"
-            :aria-current="activeSection === item.sectionId ? 'location' : undefined"
-            class="flex h-14 items-center justify-between border-b border-white/10 text-lg font-semibold text-white no-underline hover:text-iugm-green-300 aria-[current=location]:text-iugm-green-300"
+            :aria-current="navItemCurrent(item, route.path, activeSection)"
+            class="flex h-14 items-center justify-between border-b border-white/10 text-lg font-semibold text-white no-underline hover:text-iugm-green-300 aria-[current=location]:text-iugm-green-300 aria-[current=page]:text-iugm-green-300"
             @navigate="onNavigate(item)"
           >
             {{ item.label }}<span
@@ -156,7 +156,7 @@ watch(isDesktop, (desktop) => {
               :to="applyLink.to"
               @navigate="onNavigate(applyLink)"
             >
-              Candidater à l’IUGM
+              {{ applyLink.label }}
             </AppNavLink>
           </Button>
           <p

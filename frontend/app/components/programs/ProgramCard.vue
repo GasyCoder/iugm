@@ -17,8 +17,7 @@ const domainDot: Record<ProgramDomain, string> = {
 </script>
 
 <template>
-  <!-- Pas de fiche formation publiée : carte informative, non cliquable. -->
-  <article class="flex h-full flex-col gap-3 border-b border-border py-4 text-foreground sm:rounded sm:border sm:bg-surface sm:p-6">
+  <article class="relative flex h-full flex-col gap-3 border-b border-border py-4 text-foreground transition duration-150 ease-out-soft sm:rounded sm:border sm:bg-surface sm:p-6 sm:hover:border-iugm-blue-300 sm:hover:shadow-card-hover">
     <div class="flex items-center justify-between gap-3">
       <span class="flex items-center gap-2 text-[13px] font-semibold text-foreground-muted">
         <span
@@ -33,7 +32,13 @@ const domainDot: Record<ProgramDomain, string> = {
       </span>
     </div>
     <h3 class="m-0 flex-1 text-lg leading-snug font-bold text-balance">
-      {{ program.title }}
+      <!-- Lien étendu à toute la carte (after:inset-0). -->
+      <NuxtLink
+        :to="`/formations/${program.slug}`"
+        class="text-foreground no-underline after:absolute after:inset-0 hover:text-primary"
+      >
+        {{ program.title }}
+      </NuxtLink>
     </h3>
     <p class="m-0 text-sm text-foreground-muted">
       {{ program.admission }}
@@ -43,8 +48,15 @@ const domainDot: Record<ProgramDomain, string> = {
       label="NIVEAU À CONFIRMER PAR L’IUGM"
       class="sm:hidden"
     />
-    <div class="hidden items-center border-t border-sand-200 pt-3 sm:flex">
-      <IugmPendingTag :label="program.status === 'pending' ? 'NIVEAU À CONFIRMER PAR L’IUGM' : 'BROCHURE IUGM · À CONFIRMER'" />
+    <div class="flex items-center justify-between gap-3 sm:border-t sm:border-sand-200 sm:pt-3">
+      <IugmPendingTag
+        :label="program.status === 'pending' ? 'NIVEAU À CONFIRMER PAR L’IUGM' : 'BROCHURE IUGM · À CONFIRMER'"
+        class="hidden sm:inline"
+      />
+      <span
+        aria-hidden="true"
+        class="shrink-0 text-sm font-semibold text-primary"
+      >Fiche →</span>
     </div>
   </article>
 </template>

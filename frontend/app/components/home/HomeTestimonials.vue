@@ -136,7 +136,7 @@ const chipState = (selected: boolean) => (selected
         v-for="(item, index) in visible"
         :key="item.id"
         type="button"
-        class="flex h-6 cursor-pointer items-center"
+        class="flex h-6 min-w-6 cursor-pointer items-center justify-center"
         :aria-label="`Témoignage ${index + 1} sur ${visible.length}`"
         :aria-current="index === activeIndex ? 'true' : undefined"
         @click="scrollToCard(index)"

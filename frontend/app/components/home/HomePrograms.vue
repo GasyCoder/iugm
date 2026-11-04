@@ -144,6 +144,12 @@ const chipClass = 'h-9 shrink-0 cursor-pointer rounded-full border px-4 text-[13
           SOURCE : BROCHURES IUGM · À CONFIRMER
         </p>
       </TabsContent>
+      <NuxtLink
+        to="/formations"
+        class="self-start text-[15px] font-semibold"
+      >
+        Voir le catalogue complet <span aria-hidden="true">→</span>
+      </NuxtLink>
     </TabsRoot>
   </IugmSection>
 </template>

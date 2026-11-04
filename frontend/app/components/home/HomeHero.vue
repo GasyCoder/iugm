@@ -53,14 +53,14 @@ const highlighted = new Set(['Institut', 'Universitaire', 'Gestion', 'Management
             {{ hero.tagline }}
           </p>
           <div class="mt-2 flex flex-col gap-3 sm:flex-row">
-            <IugmArrowLink :to="{ path: '/', hash: '#formations' }">
+            <IugmArrowLink to="/formations">
               Découvrir nos formations
             </IugmArrowLink>
             <Button
               as-child
               variant="outlineLight"
             >
-              <AppNavLink :to="{ path: '/', hash: '#admissions' }">
+              <AppNavLink to="/admissions">
                 Rejoindre l’IUGM
               </AppNavLink>
             </Button>

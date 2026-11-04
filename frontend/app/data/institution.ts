@@ -3,7 +3,9 @@ import { emailContact, phoneContact } from '~/utils/contact'
 
 /**
  * Coordonnées reprises des brochures IUGM (design/uploads) et du prototype v2.
- * L'adresse email n'apparaît dans aucune brochure : statut « pending ».
+ * L'adresse email générale vient du prototype, aucune brochure ne la mentionne : statut « pending ».
+ * La brochure « Formation à distance » donne ses propres coordonnées (`distanceLearning`), à confirmer :
+ * un second numéro proche de celui de Maevatanana (…579 42 / …579 44) et une autre adresse email.
  * Aucun moyen de contact n'est « verified » : pas de lien tel:/mailto: tant que l'IUGM ne les a pas validés.
  */
 export const institution: Institution = {
@@ -30,6 +32,16 @@ export const institution: Institution = {
     address: 'communication2022.iugm@gmail.com',
     status: 'pending',
   },
+  distanceLearning: {
+    phones: [
+      { display: '032 41 048 32', e164: '+261324104832' },
+      { display: '034 07 579 42', e164: '+261340757942' },
+    ],
+    email: {
+      address: 'iugm.gehos2021@gmail.com',
+      status: 'brochure',
+    },
+  },
   facebook: {
     label: 'IUGM Majunga',
   },
@@ -43,4 +55,8 @@ export const contacts = {
     name: campus.name,
     phones: campus.phones.map(phone => phoneContact(phone, campus.status)),
   })),
+  distance: [
+    ...institution.distanceLearning.phones.map(phone => phoneContact(phone, 'brochure')),
+    emailContact(institution.distanceLearning.email),
+  ],
 }

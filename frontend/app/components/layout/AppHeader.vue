@@ -14,8 +14,10 @@ const isMounted = useMounted()
 const { y } = useWindowScroll()
 const solid = computed(() => !props.overlay || (isMounted.value && y.value > 40))
 
-const sectionIds = [...new Set(mobileNavigation.flatMap(item => (item.sectionId ? [item.sectionId] : [])))]
+// « formations » et « admissions » n'ont plus d'entrée de menu dédiée à leur section, mais délimitent les sections voisines.
+const sectionIds = [...new Set(['formations', 'admissions', ...mobileNavigation.flatMap(item => (item.sectionId ? [item.sectionId] : []))])]
 const activeSection = useActiveSection(sectionIds)
+const route = useRoute()
 </script>
 
 <template>
@@ -57,10 +59,10 @@ const activeSection = useActiveSection(sectionIds)
             v-for="item in mainNavigation"
             :key="item.label"
             :to="item.to"
-            :aria-current="activeSection === item.sectionId ? 'location' : undefined"
-            class="relative no-underline transition-colors duration-150 after:absolute after:inset-x-0 after:-bottom-2 after:h-0.5 after:origin-left after:scale-x-0 after:bg-iugm-green-500 after:transition-transform after:duration-240 after:ease-out-soft aria-[current=location]:after:scale-x-100"
+            :aria-current="navItemCurrent(item, route.path, activeSection)"
+            class="relative no-underline transition-colors duration-150 after:absolute after:inset-x-0 after:-bottom-2 after:h-0.5 after:origin-left after:scale-x-0 after:bg-iugm-green-500 after:transition-transform after:duration-240 after:ease-out-soft aria-[current=location]:after:scale-x-100 aria-[current=page]:after:scale-x-100"
             :class="solid
-              ? 'text-foreground hover:text-primary aria-[current=location]:text-primary'
+              ? 'text-foreground hover:text-primary aria-[current=location]:text-primary aria-[current=page]:text-primary'
               : 'text-white hover:text-iugm-green-300'"
           >
             {{ item.label }}
@@ -74,7 +76,9 @@ const activeSection = useActiveSection(sectionIds)
             :variant="solid ? 'default' : 'light'"
           >
             <AppNavLink :to="applyLink.to">
-              {{ applyLink.label }}
+              <!-- Libellé court sur mobile : le libellé complet recouvrirait le logo. -->
+              <span class="sm:hidden">Admissions</span>
+              <span class="hidden sm:inline">{{ applyLink.label }}</span>
             </AppNavLink>
           </Button>
           <MobileNavigation

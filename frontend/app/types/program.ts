@@ -10,7 +10,10 @@ export interface Program {
   title: string
   level: ProgramLevel
   domain: ProgramDomain
-  /** Conditions d'accès telles qu'indiquées par la source (séries de bac, mention…). */
+  /**
+   * Ligne d'information de la carte : séries de bac (Licence), mention (Master) ou modalité (à distance).
+   * Seules les séries de bac sont une condition d'accès : voir `documentedAdmission`.
+   */
   admission: string
   status: VerificationStatus
 }

@@ -57,3 +57,46 @@ export function availableLevels(programs: readonly Program[]): ProgramLevel[] {
   const present = new Set(programs.map(program => program.level))
   return (Object.keys(programLevelLabels) as ProgramLevel[]).filter(level => present.has(level))
 }
+
+/**
+ * Condition d'accès indiquée par une brochure, ou `null` si elle n'en donne aucune.
+ * Seule la brochure Licence précise des séries de bac : pour les autres offres,
+ * `admission` porte une mention ou une modalité, à ne pas présenter comme une condition.
+ */
+export function documentedAdmission(program: Program): string | null {
+  return program.level === 'licence' ? program.admission : null
+}
+
+/** Autres formations de la même offre, celles du même domaine en premier. */
+export function relatedPrograms(programs: readonly Program[], program: Program, limit = 3): Program[] {
+  const others = programs.filter(other => other.level === program.level && other.id !== program.id)
+  return [
+    ...others.filter(other => other.domain === program.domain),
+    ...others.filter(other => other.domain !== program.domain),
+  ].slice(0, limit)
+}
+
+function firstQueryValue(value: unknown): string {
+  const first = Array.isArray(value) ? value[0] : value
+  return typeof first === 'string' ? first : ''
+}
+
+/** Critères du catalogue depuis l'URL ; toute valeur inconnue est ignorée. */
+export function filtersFromQuery(query: Record<string, unknown>): ProgramFilters {
+  const level = firstQueryValue(query.niveau)
+  const domain = firstQueryValue(query.domaine)
+  return {
+    keyword: firstQueryValue(query.q),
+    level: Object.hasOwn(programLevelLabels, level) ? level as ProgramLevel : null,
+    domain: Object.hasOwn(programDomainLabels, domain) ? domain as ProgramDomain : null,
+  }
+}
+
+/** URL du catalogue pour ces critères : seuls les critères actifs y figurent. */
+export function filtersToQuery(filters: Readonly<ProgramFilters>): Record<string, string> {
+  return {
+    ...(filters.keyword.trim() ? { q: filters.keyword } : {}),
+    ...(filters.level ? { niveau: filters.level } : {}),
+    ...(filters.domain ? { domaine: filters.domain } : {}),
+  }
+}

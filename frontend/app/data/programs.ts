@@ -1,4 +1,4 @@
-import type { Program, ProgramDomain, ProgramLevel } from '~/types/program'
+import type { Program, ProgramDomain, ProgramLevel } from '../types/program'
 
 /**
  * Offre de formation reprise des brochures IUGM (design/uploads, 3 brochures)
@@ -45,10 +45,10 @@ const seeds: ProgramSeed[] = [
   { level: 'distance', domain: 'economie', title: 'Licence Économie', admission: 'Formation à distance' },
   { level: 'distance', domain: 'finances', title: 'Master Finances publiques', admission: 'Formation à distance' },
   { level: 'distance', domain: 'management', title: 'Master Management public', admission: 'Formation à distance' },
-  // Niveau ambigu dans la brochure « Formation à distance » : rangés en Master par le prototype.
-  { level: 'distance', domain: 'management', title: 'Master Gestion des Établissements Hospitaliers', admission: 'Formation à distance', status: 'pending' },
-  { level: 'distance', domain: 'economie', title: 'Master Économie de Développement National', admission: 'Formation à distance', status: 'pending' },
-  { level: 'distance', domain: 'management', title: 'Master Gestion des Ressources Humaines', admission: 'Formation à distance', status: 'pending' },
+  // Niveau ambigu dans la brochure « Formation à distance » : listés sans en-tête de niveau, donc non présentés comme des Masters.
+  { level: 'distance', domain: 'management', title: 'Gestion des Établissements Hospitaliers', admission: 'Formation à distance', status: 'pending' },
+  { level: 'distance', domain: 'economie', title: 'Économie de Développement National', admission: 'Formation à distance', status: 'pending' },
+  { level: 'distance', domain: 'management', title: 'Gestion des Ressources Humaines', admission: 'Formation à distance', status: 'pending' },
 ]
 
 function slugify(value: string): string {

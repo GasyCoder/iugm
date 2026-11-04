@@ -7,7 +7,7 @@ import type { ContactPoint } from '~/types/institution'
  */
 const props = withDefaults(defineProps<{
   point: ContactPoint
-  /** Libellé à la place de la valeur (ex. « Appeler »). */
+  /** Libellé d'action à la place de la valeur (ex. « Appeler ») : uniquement si le lien est actif. */
   label?: string
   tone?: 'light' | 'dark'
   /** Afficher la mention à côté du texte (désactivé quand une mention commune existe). */
@@ -20,7 +20,7 @@ const props = withDefaults(defineProps<{
 })
 
 const href = computed(() => contactHref(props.point))
-const text = computed(() => props.label ?? props.point.display)
+const text = computed(() => (href.value ? props.label ?? props.point.display : props.point.display))
 </script>
 
 <template>

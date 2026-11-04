@@ -3,7 +3,7 @@ import type { RouteLocationRaw } from 'vue-router'
 export interface NavItem {
   label: string
   to: RouteLocationRaw
-  /** Identifiant de la section de la page d'accueil ciblée, pour l'état actif. */
+  /** Section de la page d'accueil ciblée, pour l'état actif ; absent pour un lien vers une page. */
   sectionId?: string
 }
 

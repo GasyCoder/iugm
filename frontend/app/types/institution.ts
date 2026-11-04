@@ -38,6 +38,14 @@ export interface Institution {
     address: string
     status: VerificationStatus
   }
+  /** Coordonnées propres à la brochure « Formation à distance ». */
+  distanceLearning: {
+    phones: PhoneContact[]
+    email: {
+      address: string
+      status: VerificationStatus
+    }
+  }
   facebook: {
     label: string
     /** URL officielle non fournie : le lien ne sera affiché qu'une fois confirmé. */

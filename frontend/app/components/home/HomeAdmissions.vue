@@ -31,8 +31,14 @@ import { admissions } from '~/data/home'
           class="mt-1"
         />
         <AppNavLink
-          :to="{ path: '/', hash: '#contact' }"
+          to="/admissions"
           class="mt-2 text-[15px] font-semibold text-white hover:text-iugm-green-300"
+        >
+          Conditions d’admission <span aria-hidden="true">→</span>
+        </AppNavLink>
+        <AppNavLink
+          :to="{ path: '/', hash: '#contact' }"
+          class="text-[15px] font-semibold text-white hover:text-iugm-green-300"
         >
           Contacter l’IUGM <span aria-hidden="true">→</span>
         </AppNavLink>

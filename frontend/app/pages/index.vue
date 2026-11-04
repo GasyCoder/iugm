@@ -3,12 +3,8 @@ import { institution } from '~/data/institution'
 
 definePageMeta({ headerOverlay: true })
 
-const description = `${institution.name} (${institution.acronym}), ${institution.parent} : formations en gestion, commerce et économie — Licence, Master et formation à distance.`
-
-useSeoMeta({
-  description,
-  ogTitle: `${institution.acronym} — ${institution.name}`,
-  ogDescription: description,
+usePageSeo({
+  description: `${institution.name} (${institution.acronym}), ${institution.parent} : formations en gestion, commerce et économie — Licence, Master et formation à distance.`,
 })
 </script>
 

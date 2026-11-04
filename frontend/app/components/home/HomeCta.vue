@@ -20,7 +20,7 @@ const ctaContacts = mainPhone ? [mainPhone, contacts.email] : [contacts.email]
         Votre avenir professionnel commence ici.
       </h2>
       <div class="flex flex-col gap-3 sm:flex-row">
-        <IugmArrowLink :to="{ path: '/', hash: '#formations' }">
+        <IugmArrowLink to="/formations">
           Découvrir les formations
         </IugmArrowLink>
         <Button
@@ -28,8 +28,8 @@ const ctaContacts = mainPhone ? [mainPhone, contacts.email] : [contacts.email]
           variant="outlineLight"
           class="border-white"
         >
-          <AppNavLink :to="{ path: '/', hash: '#admissions' }">
-            Candidater à l’IUGM
+          <AppNavLink to="/admissions">
+            Comment candidater
           </AppNavLink>
         </Button>
       </div>
