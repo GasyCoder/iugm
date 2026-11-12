@@ -44,22 +44,22 @@ const slider = useHeroSlider(heroSlides.length)
         </div>
 
         <!-- Vignettes : navigation directe dans le diaporama. -->
-        <div class="mt-10 hidden items-center gap-3 lg:flex">
+        <div class="mt-10 hidden flex-wrap items-center gap-2 lg:flex">
           <button
             v-for="(slide, index) in heroSlides"
             :key="slide.key"
             type="button"
             :aria-label="`Afficher la photo : ${slide.title}`"
             :aria-current="index === slider.active.value ? 'true' : undefined"
-            class="relative size-14 cursor-pointer overflow-hidden rounded-lg ring-offset-2 ring-offset-background transition duration-300"
+            class="relative size-12 cursor-pointer overflow-hidden rounded-lg ring-offset-2 ring-offset-background transition duration-300"
             :class="index === slider.active.value ? 'ring-2 ring-primary' : 'opacity-70 grayscale hover:opacity-100 hover:grayscale-0'"
             @click="slider.go(index)"
           >
             <img
               :src="`${slide.base}-${heroThumbnailWidth}.webp`"
               alt=""
-              width="56"
-              height="56"
+              width="48"
+              height="48"
               loading="lazy"
               decoding="async"
               class="size-full object-cover"

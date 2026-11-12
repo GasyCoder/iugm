@@ -23,6 +23,18 @@ function photo(album: string, key: string, image: Omit<MediaImage, 'source' | 'a
 
 export const galleryAlbums: GalleryAlbum[] = [
   {
+    // Photos du communiqué du 29 octobre 2026 (voir data/articles.ts). Les personnes ne sont pas nommées : qui figure sur quelle photo n'est pas précisé.
+    slug: 'erasmus-hei-blue',
+    title: 'Erasmus+ HEI-Blue',
+    description: 'Visites de courtoisie avant la conférence finale du projet, à l’île Maurice.',
+    photos: [
+      photo('erasmus-hei-blue', 'visite-1-debout', { alt: 'L’étudiante et un participant en polo HEI-Blue, debout aux côtés de leur hôte lors d’une visite de courtoisie', width: 1333, height: 1600 }, '50% 30%'),
+      photo('erasmus-hei-blue', 'visite-2-entretien', { alt: 'Échange entre l’hôte et deux participants en polo HEI-Blue, assis dans un bureau', width: 1280, height: 960 }),
+      photo('erasmus-hei-blue', 'visite-2-debout', { alt: 'L’étudiante, en polo HEI-Blue, entre son hôte et un autre participant du projet', width: 1280, height: 960 }, '50% 35%'),
+      photo('erasmus-hei-blue', 'visite-1-assis', { alt: 'L’étudiante et deux participants assis autour d’une table basse lors d’une visite de courtoisie', width: 1333, height: 1600 }, '50% 40%'),
+    ],
+  },
+  {
     slug: 'stand-iugm',
     title: 'Le stand de l’IUGM',
     description: 'L’équipe de l’Institut présente ses formations aux visiteurs.',

@@ -11,7 +11,6 @@ import type {
   Testimonial,
   TestimonialCategory,
 } from '~/types/content'
-import type { ProgramLevel } from '~/types/program'
 import { institution } from '~/data/institution'
 import { media } from '~/data/media'
 import { programs } from '~/data/programs'
@@ -37,15 +36,9 @@ export const pillars: Pillar[] = [
   { number: '03', title: 'Se professionnaliser', description: 'Stages, intervenants du monde professionnel et projets avec les entreprises préparent à l’insertion.' },
 ]
 
-function programCount(level?: ProgramLevel): string {
-  return String(programs.filter(program => !level || program.level === level).length)
-}
-
 /** Uniquement ce que les brochures permettent de compter. Effectifs, diplômés et partenaires : à ajouter une fois communiqués. */
 export const keyFigures: KeyFigure[] = [
-  { value: programCount(), label: 'formations', status: 'brochure' },
-  { value: programCount('licence'), label: 'en Licence', status: 'brochure' },
-  { value: programCount('master'), label: 'en Master', status: 'brochure' },
+  { value: String(programs.length), label: 'formations', status: 'brochure' },
   { value: String(1 + institution.regionalCampuses.length), label: 'sites', status: 'brochure' },
 ]
 

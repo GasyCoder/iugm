@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { directorMessage, keyFigures, publishedNews, publishedTestimonials } from '~/data/home'
+import { galleryAlbums } from '~/data/gallery'
 import { contacts } from '~/data/institution'
 import { heroImageWidths, heroSlides, heroThumbnailWidth } from '~/data/media'
 import { programs } from '~/data/programs'
@@ -22,6 +23,15 @@ describe('diaporama du Hero', () => {
     }
   })
 
+  it('garde les photos d’origine en tête, puis les photos ajoutées depuis la galerie', () => {
+    expect(heroSlides.slice(0, 4).map(slide => slide.key)).toEqual(['remise-diplomes', 'promotion-hery-miray', 'stand-equipe', 'stand-salon'])
+    const galleryImages = galleryAlbums.flatMap(album => album.photos.map(photo => photo.image))
+    for (const slide of heroSlides.slice(4)) {
+      expect(galleryImages).toContain(slide.image)
+    }
+    expect(new Set(heroSlides.map(slide => slide.key)).size).toBe(heroSlides.length)
+  })
+
   it('conserve le crédit des photographies de Mim’SARY', () => {
     const credited = heroSlides.filter(slide => ['remise-diplomes.jpg', 'promotion-hery-miray.jpg'].includes(slide.image.source))
     expect(credited).toHaveLength(2)
@@ -39,9 +49,8 @@ describe('chiffres de « L’IUGM en bref »', () => {
   })
 
   it('correspond aux formations réellement publiées', () => {
+    expect(keyFigures.map(figure => figure.label)).toEqual(['formations', 'sites'])
     expect(keyFigures.find(figure => figure.label === 'formations')?.value).toBe(String(programs.length))
-    const licence = programs.filter(program => program.level === 'licence').length
-    expect(keyFigures.find(figure => figure.label === 'en Licence')?.value).toBe(String(licence))
   })
 })
 

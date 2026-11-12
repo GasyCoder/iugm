@@ -4,6 +4,7 @@
       href="#contenu"
       class="sr-only z-60 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:text-primary-foreground"
     >Aller au contenu</a>
+    <AppFlashInfo />
     <AppAnnouncementBar />
     <AppHeader />
     <main

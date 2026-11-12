@@ -1,4 +1,5 @@
 import type { HeroSlide, MediaImage } from '~/types/content'
+import { findAlbum } from './gallery.ts'
 
 /**
  * Photographies de l'IUGM. Originaux : design/assets (hors dépôt) ; déclinaisons publiées : public/images/hero.
@@ -49,8 +50,17 @@ export const media = {
 export const heroImageWidths = [480, 800, 1280]
 export const heroThumbnailWidth = 160
 
-/** Légendes limitées à ce que montrent les photos : ni date ni lieu, non communiqués. */
-export const heroSlides: HeroSlide[] = [
+/** Photo de la galerie reprise dans le Hero, déclinée aux largeurs du diaporama dans public/images/hero. */
+function slideFromGallery(albumSlug: string, photoKey: string, title: string, subtitle: string, position = '50% 50%'): HeroSlide {
+  const photo = findAlbum(albumSlug)?.photos.find(item => item.key === photoKey)
+  if (!photo) {
+    throw new Error(`Photo de galerie introuvable : ${albumSlug}/${photoKey}`)
+  }
+  return { key: photo.key, base: `/images/hero/${photo.key}`, image: photo.image, title, subtitle, position }
+}
+
+/** Photos d'origine du Hero ; légendes limitées à ce que montrent les photos : ni date ni lieu, non communiqués. */
+const originalSlides: HeroSlide[] = [
   {
     key: 'remise-diplomes',
     base: '/images/hero/remise-diplomes',
@@ -83,6 +93,21 @@ export const heroSlides: HeroSlide[] = [
     subtitle: 'Avec des représentants de l’Université de Mahajanga',
     position: '50% 35%',
   },
+]
+
+const heiBlue = 'Visite de courtoisie avant la conférence finale à l’île Maurice'
+
+/** Photos d'origine, puis photos ajoutées depuis la galerie (12 novembre 2026). */
+export const heroSlides: HeroSlide[] = [
+  ...originalSlides,
+  slideFromGallery('erasmus-hei-blue', 'visite-2-debout', 'Erasmus+ HEI-Blue', heiBlue, '50% 30%'),
+  slideFromGallery('erasmus-hei-blue', 'visite-1-debout', 'Erasmus+ HEI-Blue', heiBlue, '50% 25%'),
+  slideFromGallery('erasmus-hei-blue', 'visite-2-entretien', 'Erasmus+ HEI-Blue', heiBlue, '50% 45%'),
+  slideFromGallery('erasmus-hei-blue', 'visite-1-assis', 'Erasmus+ HEI-Blue', heiBlue, '50% 40%'),
+  slideFromGallery('culture-artisanat', 'grand-groupe', 'Culture et artisanat', 'Tenues traditionnelles et créations des étudiants', '50% 60%'),
+  slideFromGallery('ceremonies', 'estrade-iugm', 'Cérémonies officielles', 'Sur l’estrade de l’IUGM', '50% 45%'),
+  slideFromGallery('stand-iugm', 'accueil-visiteur', 'Le stand de l’IUGM', 'L’équipe présente les formations aux visiteurs', '45% 50%'),
+  slideFromGallery('vie-etudiante', 'amphitheatre', 'Vie étudiante', 'En amphithéâtre avec l’équipe de l’Institut', '50% 50%'),
 ]
 
 export const logo = {

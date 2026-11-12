@@ -16,12 +16,13 @@ export const mainNavigation: NavItem[] = [
   { label: 'L’Institut', to: homeSection('institut'), sectionId: 'institut' },
   { label: 'Formations', to: '/formations' },
   { label: 'Admissions', to: '/admissions' },
-  { label: 'Vie étudiante', to: homeSection('vie-iugm'), sectionId: 'vie-iugm' },
+  { label: 'Actualités', to: '/actualites' },
+  { label: 'Vie étudiante', to: '/galerie/vie-etudiante' },
   { label: 'Galerie', to: '/galerie' },
   { label: 'Contact', to: contactLink, sectionId: 'contact' },
 ]
 
-/** « Actualités » et « Alumni » reviendront avec leurs sections, une fois de vrais contenus publiés. */
+/** « Alumni » reviendra avec sa section, une fois de vrais contenus publiés. */
 export const mobileNavigation: NavItem[] = mainNavigation
 
 /** Aucune candidature en ligne : le lien mène aux informations d'admission, et le dit. */
@@ -32,6 +33,8 @@ export const footerNavigation: FooterLinkGroup[] = [
     title: 'L’Institut',
     links: [
       { label: 'Présentation', to: homeSection('institut') },
+      { label: 'Actualités', to: '/actualites' },
+      { label: 'Annonces', to: '/annonces' },
       { label: 'Galerie', to: '/galerie' },
       { label: 'Histoire' },
       { label: 'Gouvernance' },
@@ -44,7 +47,7 @@ export const footerNavigation: FooterLinkGroup[] = [
       { label: 'Master', to: programsAtLevel('master') },
       { label: 'Formation à distance', to: programsAtLevel('distance') },
       { label: 'Admissions', to: '/admissions' },
-      { label: 'Vie étudiante', to: homeSection('vie-iugm') },
+      { label: 'Vie étudiante', to: '/galerie/vie-etudiante' },
     ],
   },
 ]

@@ -1,4 +1,6 @@
 import tailwindcss from '@tailwindcss/vite'
+import { announcements } from './app/data/announcements'
+import { articles } from './app/data/articles'
 import { galleryAlbums } from './app/data/gallery'
 import { programs } from './app/data/programs'
 
@@ -72,6 +74,10 @@ export default defineNuxtConfig({
         ...programs.map(program => `/formations/${program.slug}`),
         '/galerie',
         ...galleryAlbums.map(album => `/galerie/${album.slug}`),
+        '/annonces',
+        '/actualites',
+        ...articles.filter(item => item.status === 'verified').map(item => `/actualites/${item.slug}`),
+        ...announcements.filter(item => item.status !== 'pending').map(item => `/annonces/${item.slug}`),
       ],
       crawlLinks: true,
       failOnError: true,

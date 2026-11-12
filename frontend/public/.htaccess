@@ -38,6 +38,11 @@ ErrorDocument 404 /404.html
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
   Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
 
+  # Pages et payloads : revalidés à chaque visite, pour qu'une mise à jour s'affiche aussitôt.
+  <FilesMatch "\.(html|json)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+
   <If "%{REQUEST_URI} =~ m#^/_nuxt/builds/#">
     Header set Cache-Control "public, max-age=0, must-revalidate"
   </If>

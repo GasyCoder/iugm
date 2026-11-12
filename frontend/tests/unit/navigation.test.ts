@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { RouteLocationRaw } from 'vue-router'
 import { readdirSync } from 'node:fs'
+import { galleryAlbums } from '~/data/gallery'
 import { contacts, institution } from '~/data/institution'
 import { applyLink, footerNavigation, mainNavigation, mobileNavigation } from '~/data/navigation'
 import { contactHref } from '~/utils/contact'
@@ -20,7 +21,7 @@ describe('navigation', () => {
       return []
     }
     return [`/${file.replace(/\.vue$/, '').replace(/(^|\/)index$/, '')}`]
-  }))
+  }).concat(galleryAlbums.map(album => `/galerie/${album.slug}`)))
 
   it('ne cible que des pages existantes', () => {
     const items = [

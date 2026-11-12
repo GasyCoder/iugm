@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { publishedNews, publishedTestimonials } from '~/data/home'
+import { articles } from '~/data/articles'
+import { publishedTestimonials } from '~/data/home'
 import { institution } from '~/data/institution'
+
+const hasNews = publishedArticles(articles).length > 0
 
 usePageSeo({
   description: `${institution.name} (${institution.acronym}), ${institution.parent} : formations en gestion, commerce et économie — Licence, Master et formation à distance.`,
@@ -14,6 +17,7 @@ usePageSeo({
         <HomeProgramSearch />
       </template>
     </HomeHero>
+    <HomeAnnouncements />
     <HomeIntroduction />
     <HomeDirectorMessage />
     <HomePrograms />
@@ -22,8 +26,7 @@ usePageSeo({
     <HomeStudentProjects />
     <HomeBusiness />
     <HomeTestimonials v-if="publishedTestimonials.length > 0" />
-    <HomeNews v-if="publishedNews.length > 0" />
-    <HomeCampusLife />
+    <HomeNews v-if="hasNews" />
     <HomeCta />
   </div>
 </template>

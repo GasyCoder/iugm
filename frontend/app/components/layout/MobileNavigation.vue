@@ -2,7 +2,7 @@
 import type { Component } from 'vue'
 import type { NavItem } from '~/types/navigation'
 import { useMediaQuery } from '@vueuse/core'
-import { FileCheck, GraduationCap, Images, Info, Mail, Menu, Users, X } from '@lucide/vue'
+import { FileCheck, GraduationCap, Images, Info, Mail, Menu, Newspaper, Users, X } from '@lucide/vue'
 import { DialogClose, DialogContent, DialogDescription, DialogOverlay, DialogPortal, DialogTitle } from 'reka-ui'
 import { applyLink, mobileNavigation } from '~/data/navigation'
 import { contacts, institution } from '~/data/institution'
@@ -21,6 +21,7 @@ const icons: Record<string, Component> = {
   'L’Institut': Info,
   'Formations': GraduationCap,
   'Admissions': FileCheck,
+  'Actualités': Newspaper,
   'Vie étudiante': Users,
   'Galerie': Images,
   'Contact': Mail,
