@@ -1,4 +1,5 @@
 import tailwindcss from '@tailwindcss/vite'
+import { galleryAlbums } from './app/data/gallery'
 import { programs } from './app/data/programs'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
@@ -69,6 +70,8 @@ export default defineNuxtConfig({
         '/robots.txt',
         '/sitemap.xml',
         ...programs.map(program => `/formations/${program.slug}`),
+        '/galerie',
+        ...galleryAlbums.map(album => `/galerie/${album.slug}`),
       ],
       crawlLinks: true,
       failOnError: true,

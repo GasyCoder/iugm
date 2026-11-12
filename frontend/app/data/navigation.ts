@@ -17,7 +17,7 @@ export const mainNavigation: NavItem[] = [
   { label: 'Formations', to: '/formations' },
   { label: 'Admissions', to: '/admissions' },
   { label: 'Vie étudiante', to: homeSection('vie-iugm'), sectionId: 'vie-iugm' },
-  { label: 'Entreprises', to: homeSection('entreprises'), sectionId: 'entreprises' },
+  { label: 'Galerie', to: '/galerie' },
   { label: 'Contact', to: contactLink, sectionId: 'contact' },
 ]
 
@@ -32,6 +32,7 @@ export const footerNavigation: FooterLinkGroup[] = [
     title: 'L’Institut',
     links: [
       { label: 'Présentation', to: homeSection('institut') },
+      { label: 'Galerie', to: '/galerie' },
       { label: 'Histoire' },
       { label: 'Gouvernance' },
     ],

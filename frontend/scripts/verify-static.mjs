@@ -6,6 +6,7 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { basename, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { galleryAlbums, galleryImageWidths } from '../app/data/gallery.ts'
 import { heroImageWidths, heroSlides, heroThumbnailWidth, media } from '../app/data/media.ts'
 import { programs } from '../app/data/programs.ts'
 
@@ -26,10 +27,17 @@ const expected = [
   ['admissions.html', 'Comment rejoindre l’IUGM'],
   ['404.html', 'Page introuvable'],
   ...programs.map(program => [`formations/${program.slug}.html`, program.title]),
+  ['galerie.html', 'Galerie'],
+  ...galleryAlbums.map(album => [`galerie/${album.slug}.html`, album.title]),
 ]
 for (const slide of heroSlides) {
   for (const width of [heroThumbnailWidth, ...heroImageWidths]) {
     expected.push([`${slide.base.slice(1)}-${width}.webp`, ''])
+  }
+}
+for (const photo of galleryAlbums.flatMap(album => album.photos)) {
+  for (const width of galleryImageWidths) {
+    expected.push([`${photo.base.slice(1)}-${width}.webp`, ''])
   }
 }
 for (const width of [320, 640]) {
@@ -51,7 +59,8 @@ for (const file of ['_headers', 'robots.txt']) {
 }
 
 // Photographies aux droits non confirmés : aucun fichier publié.
-const pendingPhotos = new Set(Object.values(media).filter(image => image.rights === 'pending').map(image => image.source))
+const allMedia = [...Object.values(media), ...galleryAlbums.flatMap(album => album.photos.map(photo => photo.image))]
+const pendingPhotos = new Set(allMedia.filter(image => image.rights === 'pending').map(image => image.source))
 for (const file of files.filter(file => pendingPhotos.has(basename(file)))) {
   failures.push(`photographie non autorisée : ${file}`)
 }
@@ -77,4 +86,4 @@ if (failures.length > 0) {
   console.error(`✖ ${failures.length} problème(s) :\n${failures.map(failure => `  - ${failure}`).join('\n')}`)
   process.exit(1)
 }
-console.log(`✔ ${htmlFiles.length} pages vérifiées, dont ${programs.length} fiches formation ; ${heroSlides.length} photos du Hero ; ${files.length} fichiers publiés.`)
+console.log(`✔ ${htmlFiles.length} pages vérifiées, dont ${programs.length} fiches formation ; ${heroSlides.length} photos du Hero ; ${galleryAlbums.length} albums ; ${files.length} fichiers publiés.`)
